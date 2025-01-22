@@ -260,6 +260,26 @@ footer p {
 }
 
 /* Animasi untuk bintang */
+/* CSS untuk elemen bintang */
+#star-field {
+  position: fixed;  /* Menggunakan fixed untuk menempel di latar belakang */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Tidak menghalangi interaksi dengan elemen lainnya */
+  z-index: -1; /* Menempatkan bintang di belakang konten */
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: twinkle 1.5s infinite ease-in-out;
+}
+
 @keyframes twinkle {
   0% {
     opacity: 0.5;
@@ -270,28 +290,4 @@ footer p {
   100% {
     opacity: 0.5;
   }
-}
-
-#star-field {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Agar tidak mengganggu interaksi dengan elemen lainnya */
-}
-
-.star {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  animation: twinkle infinite linear;
-}
-
-.star {
-  animation-name: twinkle;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
 }

@@ -1,4 +1,4 @@
-import StarField from "@/app/components/StarField";
+import StarField from "@/app/components/StarField"; // Import StarField
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 
@@ -23,9 +23,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
-        {/* Background StarField */}
-        <StarField />
-        {children}
+        {/* Latar belakang StarField */}
+        <StarField /> {/* Memastikan ini ada di seluruh halaman */}
+        
+        {/* Konten utama, pastikan z-10 ada untuk konten */}
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );

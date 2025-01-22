@@ -2,13 +2,14 @@ import React from "react";
 
 const Contact: React.FC = () => {
     return (
-        <section id="contact" className="bg-gray-800 p-12 relative glass-bg">
-            <h2 className="text-4xl font-bold mb-8 text-center text-gray-100 tracking-widest">
+        <section id="contact" className="bg-gray-900 p-12 relative">
+            <div className="absolute inset-0 bg-black opacity-50"></div> {/* Transparent overlay */}
+            <h2 className="text-4xl font-bold mb-8 text-center text-gray-100 tracking-widest relative z-10">
                 <span className="bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text animate-text-glow">
                     Contact Me
                 </span>
             </h2>
-            <div className="max-w-xl mx-auto text-center">
+            <div className="max-w-xl mx-auto text-center relative z-10">
                 <p className="text-lg text-gray-300 mb-8">
                     If you would like to get in touch, feel free to send me a message!
                 </p>
