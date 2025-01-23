@@ -7,8 +7,8 @@ const Navbar: React.FC = () => {
     return (
         <nav className="bg-gray-800 p-4 fixed w-full z-50 shadow-lg">
             <div className="container mx-auto flex justify-between items-center">
-                <a href="#" className="text-2xl font-bold text-white">
-                    Arel Zandra
+                <a href="#" className="text-2xl font-bold text-white ml-2">
+                    Arel
                 </a>
                 <button
                     id="menu-btn"

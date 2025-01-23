@@ -91,13 +91,19 @@ html, body {
 }
 
 /* Skill Card Style */
-.skill-card {
+.skill-card { 
   position: relative;
-  padding: 1.5rem;
+  padding: 2rem; /* Tambahkan padding yang lebih besar agar lebih luas */
   background: linear-gradient(135deg, #374151, #1F2937);
   border-radius: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  display: flex; /* Menggunakan flexbox */
+  justify-content: center; /* Mengatur ikon ke tengah horizontal */
+  align-items: center; /* Mengatur ikon ke tengah vertikal */
+  height: 150px; /* Sesuaikan tinggi card dengan ukuran ikon */
+  width: 150px; /* Sesuaikan lebar card dengan ukuran ikon */
+  text-align: center; /* Untuk memastikan teks tetap center */
 }
 
 .skill-card:hover {
@@ -126,11 +132,12 @@ html, body {
 }
 
 .skill-card p {
-  font-size: 1.5rem;
+  font-size: 1.2rem; /* Sesuaikan ukuran font */
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 0.3s ease;
+  color: #fff; /* Warna font putih agar lebih kontras */
 }
 
 .skill-card:hover p {

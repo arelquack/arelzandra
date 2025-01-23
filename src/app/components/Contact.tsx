@@ -13,8 +13,10 @@ const Contact: React.FC = () => {
                 <p className="text-lg text-gray-300 mb-8">
                     If you would like to get in touch, feel free to send me a message!
                 </p>
-                <a
-                    href="mailto:arelgmail@example.com"
+                <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=arel.zandra@gmail.com&su=Halo Arel"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-block bg-blue-500 text-white px-8 py-3 rounded-full text-lg font-semibold transition hover:bg-blue-400"
                 >
                     Send Email
