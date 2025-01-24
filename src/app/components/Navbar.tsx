@@ -25,9 +25,9 @@ const Navbar: React.FC = () => {
                         menuOpen ? "flex" : "hidden"
                     } md:flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0`}
                 >
-                    <a href="#projects" className="text-white hover:text-blue-400 transition">Projects</a>
+                    <a href="#" className="text-white hover:text-blue-400 transition">Home</a>
                     <a href="#skills" className="text-white hover:text-blue-400 transition">Skills</a>
-                    <a href="#testimonials" className="text-white hover:text-blue-400 transition">Testimonials</a>
+                    <a href="#projects" className="text-white hover:text-blue-400 transition">Projects</a>
                     <a href="#contact" className="text-white hover:text-blue-400 transition">Contact</a>
                 </div>
             </div>

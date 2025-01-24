@@ -79,6 +79,14 @@ html, body {
   margin-bottom: 1rem; /* Spacing antar section */
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  justify-items: center; /* Pastikan konten center horizontal */
+  align-items: center;   /* Pastikan konten center vertikal */
+}
+
 .trail-dot {
   position: fixed;
   width: 10px;

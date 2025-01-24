@@ -1,6 +1,5 @@
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaPython } from 'react-icons/fa';
-import { SiNextdotjs } from 'react-icons/si';
-import { SiTypescript } from 'react-icons/si';
+import { FaPython, FaJava, FaReact } from 'react-icons/fa';
+import { SiC, SiNuxtdotjs, SiNextdotjs, SiTypescript, SiSupabase } from 'react-icons/si';
 
 const Skills: React.FC = () => {
     return (
@@ -12,29 +11,29 @@ const Skills: React.FC = () => {
                 </span>
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
-                <div className="skill-card">
-                    <FaHtml5 size={40} color="#E34F26" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <SiTypescript size={100} color="#3178C6" />
                 </div>
-                <div className="skill-card">
-                    <FaCss3Alt size={40} color="#1572B6" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <FaPython size={100} color="#FFD43B" />
                 </div>
-                <div className="skill-card">
-                    <FaJs size={40} color="#F7DF1E" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <FaJava size={100} color="#F89820" />
                 </div>
-                <div className="skill-card">
-                    <FaReact size={40} color="#61DAFB" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <SiC size={100} color="#00599C" />
                 </div>
-                <div className="skill-card">
-                    <FaNodeJs size={40} color="#6DA55F" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <FaReact size={100} color="#3178C6" />
                 </div>
-                <div className="skill-card">
-                    <SiTypescript size={40} color="#3178C6" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <SiNextdotjs size={100} color="#000000" />
                 </div>
-                <div className="skill-card">
-                    <FaPython size={40} color="#3178C6" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <SiNuxtdotjs size={100} color="#00C58E" />
                 </div>
-                <div className="skill-card">
-                    <SiNextdotjs size={40} color="#3178C6" />
+                <div className="skill-card flex flex-col items-center justify-center">
+                    <SiSupabase size={100} color="#00C58E" />
                 </div>
             </div>
         </section>
