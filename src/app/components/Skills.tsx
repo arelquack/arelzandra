@@ -10,7 +10,7 @@ const Skills: React.FC = () => {
                     My Skills
                 </span>
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 text-center relative z-10">
                 <div className="skill-card flex flex-col items-center justify-center">
                     <SiTypescript size={100} color="#3178C6" />
                 </div>
