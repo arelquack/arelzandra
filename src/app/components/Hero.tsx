@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
                 Hi! I am Arel, a passionate IT student from Bandung State Polytechnic.
             </p>
             <a 
-                href="https://drive.google.com/uc?export=download&id=1z1XSWrs9LXRZ6nhpX-O5f8kXaQNBuHT6"
+                href="https://drive.google.com/uc?export=download&id=1fAXZPtR3pNAYOj4-usGyHeCC3uPO_9Pl"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="mt-6 px-6 py-2 bg-blue-500 hover:bg-blue-400 btn-glow transition rounded-full text-lg relative z-10"
