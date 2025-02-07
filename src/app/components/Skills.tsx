@@ -1,5 +1,5 @@
-import { FaPython, FaJava, FaReact } from 'react-icons/fa';
-import { SiC, SiNuxtdotjs, SiNextdotjs, SiTypescript, SiSupabase } from 'react-icons/si';
+import { FaPython, FaReact } from 'react-icons/fa';
+import { SiNextdotjs, SiTypescript, SiSupabase, SiJupyter } from 'react-icons/si';
 
 const Skills: React.FC = () => {
     return (
@@ -18,22 +18,16 @@ const Skills: React.FC = () => {
                     <FaPython size={100} color="#FFD43B" />
                 </div>
                 <div className="skill-card flex flex-col items-center justify-center">
-                    <FaJava size={100} color="#F89820" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <SiC size={100} color="#00599C" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
                     <FaReact size={100} color="#3178C6" />
                 </div>
                 <div className="skill-card flex flex-col items-center justify-center">
                     <SiNextdotjs size={100} color="#000000" />
                 </div>
                 <div className="skill-card flex flex-col items-center justify-center">
-                    <SiNuxtdotjs size={100} color="#00C58E" />
+                    <SiSupabase size={100} color="#00C58E" />
                 </div>
                 <div className="skill-card flex flex-col items-center justify-center">
-                    <SiSupabase size={100} color="#00C58E" />
+                    <SiJupyter size={100} color="#F37626" />
                 </div>
             </div>
         </section>
