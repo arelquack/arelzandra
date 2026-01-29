@@ -1,33 +1,66 @@
-import { FaPython, FaReact } from 'react-icons/fa';
-import { SiNextdotjs, SiTypescript, SiSupabase, SiJupyter } from 'react-icons/si';
+import React from "react";
+import { FaPython, FaReact, FaGitAlt } from 'react-icons/fa';
+import { SiNextdotjs, SiTypescript, SiSupabase, SiJupyter, SiTailwindcss } from 'react-icons/si';
+
+const skills = [
+    { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+    { name: "Python", icon: FaPython, color: "#FFD43B" },
+    { name: "React", icon: FaReact, color: "#61DAFB" },
+    { name: "Next.js", icon: SiNextdotjs, color: "#ffffff" },
+    { name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
+    { name: "Jupyter", icon: SiJupyter, color: "#F37626" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "#38B2AC" },
+    { name: "Git", icon: FaGitAlt, color: "#F05032" },
+];
 
 const Skills: React.FC = () => {
     return (
-        <section id="skills" className="p-12 relative bg-gray-900 overflow-hidden mt-0">
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-            <h2 className="text-4xl font-bold mb-8 text-center text-gray-100 tracking-widest relative z-10">
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text animate-text-glow">
-                    My Skills
-                </span>
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 text-center relative z-10">
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <SiTypescript size={100} color="#3178C6" />
+        <section id="skills" className="py-24 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 -z-10"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+                
+                {/* Section Title */}
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">
+                        My Tech <span className="text-glow-gradient">Stack</span>
+                    </h2>
+                    <p className="text-gray-400 max-w-xl mx-auto text-lg">
+                        Tools and technologies I use to bring ideas to life.
+                    </p>
                 </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <FaPython size={100} color="#FFD43B" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <FaReact size={100} color="#3178C6" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <SiNextdotjs size={100} color="#000000" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <SiSupabase size={100} color="#00C58E" />
-                </div>
-                <div className="skill-card flex flex-col items-center justify-center">
-                    <SiJupyter size={100} color="#F37626" />
+
+                {/* Skills Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                    {skills.map((skill, index) => (
+                        <div 
+                            key={index} 
+                            className="glass-card p-6 rounded-2xl flex flex-col items-center justify-center gap-4 group cursor-default transition-all duration-300 hover:-translate-y-2"
+                        >
+                            {/* Icon Wrapper dengan Glow Effect saat hover */}
+                            <div 
+                                className="p-4 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors relative"
+                            >
+                                {/* Shadow glow sesuai warna brand */}
+                                <div 
+                                    className="absolute inset-0 blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"
+                                    style={{ backgroundColor: skill.color }}
+                                ></div>
+                                
+                                <skill.icon 
+                                    size={48} 
+                                    color={skill.color} 
+                                    className="relative z-10 drop-shadow-lg"
+                                />
+                            </div>
+                            
+                            {/* Skill Name */}
+                            <h3 className="text-gray-200 font-medium text-lg tracking-wide group-hover:text-white transition-colors">
+                                {skill.name}
+                            </h3>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
