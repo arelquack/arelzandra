@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
                     <a href="#home" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Home</a>
                     <a href="#skills" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Skills</a>
                     <a href="#projects" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Projects</a>
-                    <a href="#contact" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Contact</a>
+                    <a href="/blog" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Blog</a>
                     <hr className="border-gray-700"/>
                     <a 
                         href="https://drive.google.com/uc?export=download&id=1fAXZPtR3pNAYOj4-usGyHeCC3uPO_9Pl"
