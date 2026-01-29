@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
                     <a href="#home" className="hover:text-blue-400 hover:scale-105 transition-all">Home</a>
                     <a href="#skills" className="hover:text-blue-400 hover:scale-105 transition-all">Skills</a>
                     <a href="#projects" className="hover:text-blue-400 hover:scale-105 transition-all">Projects</a>
-                    <a href="#contact" className="hover:text-blue-400 hover:scale-105 transition-all">Contact</a>
+                    <a href="/blog" className="hover:text-blue-400 hover:scale-105 transition-all">Blog</a>
                     
                     {/* Resume Button (Kecil di Navbar) */}
                     <a 

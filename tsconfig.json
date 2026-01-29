@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "content/posts/hello-world.mdx"  ],
   "exclude": [
     "node_modules"
   ]
