@@ -26,21 +26,27 @@ export default function BlogPage() {
         <div className="grid gap-8">
           {posts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <article className="glass-card p-8 rounded-2xl hover:border-blue-500/50 transition-all cursor-pointer group">
-                <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-2xl font-bold group-hover:text-blue-400 transition-colors">
+              <article className="glass-card p-6 md:p-8 rounded-2xl hover:border-blue-500/50 transition-all cursor-pointer group">
+                
+                {/* REVISI RESPONSIVITAS DI SINI */}
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-4">
+                    <h2 className="text-2xl font-bold group-hover:text-blue-400 transition-colors leading-tight">
                         {post.title}
                     </h2>
-                    <span className="text-sm text-gray-500 border border-gray-800 px-3 py-1 rounded-full">
+                    
+                    {/* shrink-0 biar kotak tanggal ngga mengecil kalau judulnya panjang */}
+                    <span className="shrink-0 text-xs md:text-sm text-gray-500 border border-gray-800 px-3 py-1 rounded-full w-fit">
                         {post.date}
                     </span>
                 </div>
-                <p className="text-gray-400 leading-relaxed mb-4">
+
+                <p className="text-gray-400 leading-relaxed mb-6 text-sm md:text-base">
                     {post.description}
                 </p>
-                <div className="flex gap-2">
+
+                <div className="flex flex-wrap gap-2">
                     {post.tags.map(tag => (
-                        <span key={tag} className="text-xs font-mono text-blue-300 bg-blue-900/20 px-2 py-1 rounded">
+                        <span key={tag} className="text-xs font-medium text-gray-300 bg-white/5 border border-gray-800 px-2 py-1 rounded hover:border-gray-600 transition-colors">
                             #{tag}
                         </span>
                     ))}

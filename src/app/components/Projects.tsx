@@ -1,15 +1,16 @@
 import Image from 'next/image';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaLinkedin, FaCalendarAlt } from 'react-icons/fa';
 
-// Tipe data project
 interface Project {
     title: string;
-    type: "web" | "analysis" | "mobile";
-    image: string; // Langsung path gambar manual
+    date: string; // Menggantikan 'type'
+    image: string;
     description: string;
-    problem: string;
-    solution: string;
     stack: string[];
+    partners?: {
+        name: string;
+        linkedin: string;
+    }[];
     links: {
         demo: string | null;
         repo: string | null;
@@ -18,42 +19,90 @@ interface Project {
 
 const projects: Project[] = [
     {
-        title: "Adkeskom Web App",
-        type: "web",
-        image: "/images/adkeskom.png", // Pastikan file ini ada di folder public/images
-        description: "Official web application for Biro Adkes Himakom Polban.",
-        problem: "Manual asset tracking and low member engagement caused administrative chaos and data inconsistency.",
-        solution: "Built a centralized Dashboard with Asset Management & Gamification System to track inventory and boost member activity through leaderboards.",
-        stack: ["Next.js", "Shadcn/ui", "Tailwind", "Supabase"],
+        title: "VoteX",
+        date: "May 2026",
+        image: "/images/votex.png",
+        description: "A Decentralized Autonomous Organization (DAO) application for transparent, secure, and immutable digital voting leveraging Ethereum.",
+        stack: ["Solidity", "Ethereum", "Next.js", "Web3"],
+        partners: [
+            {
+                name: "Zidan Taufiqurahman",
+                linkedin: "https://www.linkedin.com/in/zidan-taufiqurahman-0208ba385/"
+            }
+        ],
+        links: {
+            demo: null, 
+            repo: "https://github.com/arelquack/votex"
+        }
+    },
+    {
+        title: "Newlymom",
+        date: "May 2026",
+        image: "/images/newlymom.png",
+        description: "An integrated multi-platform system for postpartum mental health support, featuring early detection alerts and sentiment analysis.",
+        stack: ["Flutter", "Spring Boot", "Next.js", "Java"],
+        partners: [
+            {
+                name: "Reqi Jumantara Hapid",
+                linkedin: "https://www.linkedin.com/in/reqi-jumantara"
+            },
+            {
+                name: "Umar Faruq Robbany",
+                linkedin: "https://www.linkedin.com/in/umar-faruq-robbany/"
+            }
+        ],
+        links: {
+            demo: null,
+            repo: "https://github.com/arelquack/newlymom"
+        }
+    },
+    {
+        title: "AdkesKom",
+        date: "Jan 2026",
+        image: "/images/adkeskom.png",
+        description: "Web application incorporating gamification elements to track member engagement and integrate cross-stack API endpoints.",
+        stack: ["Next.js", "FastAPI", "Supabase", "Python"],
+        partners: [
+            {
+                name: "Annisa Dian Fadillah",
+                linkedin: "https://www.linkedin.com/in/annisadianfadillah"
+            }
+        ],
         links: {
             demo: "https://adkes-himakom.vercel.app",
             repo: "https://github.com/arelquack/adkes-webapp"
         }
     },
     {
-        title: "Nihongo Kurabu Portal",
-        type: "web",
-        image: "/images/website-nk.png",
-        description: "A dedicated portal for Japanese language organization.",
-        problem: "Limited visibility for recruitment and difficulty in sharing learning materials efficiently.",
-        solution: "Developed a digital hub for event showcases and material repository, successfully increasing member registration by 40%.",
-        stack: ["Next.js", "Tailwind", "Vercel"],
+        title: "RekamedChain",
+        date: "Oct 2025",
+        image: "/images/rekamedchain.png",
+        description: "MVP of an e-government digital medical record system securing patient data sovereignty through SSI and IPFS.",
+        stack: ["Golang", "Docker", "IPFS", "CI/CD"],
+        partners: [
+            {
+                name: "Reqi Jumantara Hapid",
+                linkedin: "https://www.linkedin.com/in/reqi-jumantara"
+            },
+            {
+                name: "Umar Faruq Robbany",
+                linkedin: "https://www.linkedin.com/in/umar-faruq-robbany/"
+            }
+        ],
         links: {
-            demo: "https://nk-project.vercel.app",
-            repo: "https://github.com/arelquack/nk-project"
+            demo: null,
+            repo: "https://github.com/arelquack/rekamedchain"
         }
     },
     {
-        title: "YouTube Sentiment Analysis",
-        type: "analysis",
-        image: "/images/youtube-analysis.png",
-        description: "NLP research on Ngarai Sianok tourism perception.",
-        problem: "Stakeholders struggled to process thousands of unstructured comments manually.",
-        solution: "Automated NLP pipeline to scrape 1,000+ comments, visualizing sentiment distribution and topic extraction.",
-        stack: ["Python", "NLP", "Pandas", "Matplotlib"],
+        title: "Nihongo Kurabu Portal",
+        date: "Jan 2025",
+        image: "/images/website-nk.png",
+        description: "A comprehensive web-based information system and admin dashboard with custom SEO optimization yielding top organic search rankings.",
+        stack: ["Next.js", "TypeScript", "Supabase", "Vercel"],
         links: {
-            demo: null,
-            repo: "https://github.com/arelquack/data-analytics"
+            demo: "https://nk-project.vercel.app",
+            repo: "https://github.com/arelquack/nk-project"
         }
     }
 ];
@@ -63,22 +112,19 @@ const Projects: React.FC = () => {
         <section id="projects" className="py-24 relative z-10">
             <div className="container mx-auto px-6">
                 
-                {/* Header Section */}
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white tracking-tight">
                         Featured <span className="text-glow-gradient">Projects</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        Solving real-world problems with code. Here are some of the highlights.
+                        Solving complex architectural challenges from smart contracts to cross-platform mobile apps.
                     </p>
                 </div>
 
-                {/* Projects Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, index) => (
                         <div key={index} className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group hover:border-blue-500/50 transition-colors">
                             
-                            {/* Image Wrapper */}
                             <div className="relative h-56 overflow-hidden bg-gray-900 group">
                                 <Image 
                                     src={project.image} 
@@ -87,19 +133,15 @@ const Projects: React.FC = () => {
                                     height={600}
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 relative z-10"
                                 />
-                                
-                                {/* Overlay Gradient (biar teks di atas gambar terbaca kalau ada) */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60 z-20"></div>
                             </div>
 
-                            {/* Content */}
                             <div className="p-8 flex flex-col flex-grow relative z-30 -mt-2">
-                                {/* Type Badge */}
+                                {/* Date Badge - Diubah warnanya biar lebih clean dan dikasih icon kalender */}
                                 <div className="mb-4">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                                        project.type === 'web' ? 'bg-blue-500/20 text-blue-300' : 'bg-orange-500/20 text-orange-300'
-                                    }`}>
-                                        {project.type}
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider bg-white/10 text-gray-300 border border-white/20">
+                                        <FaCalendarAlt className="text-gray-400" />
+                                        {project.date}
                                     </span>
                                 </div>
 
@@ -107,27 +149,40 @@ const Projects: React.FC = () => {
                                     {project.title}
                                 </h3>
                                 
-                                <div className="space-y-4 mb-6 flex-grow">
-                                    <p className="text-gray-400 text-sm mt-1 leading-relaxed line-clamp-3">
+                                <div className="space-y-4 mb-4 flex-grow">
+                                    <p className="text-gray-400 text-sm mt-1 leading-relaxed">
                                         {project.description}
                                     </p>
                                     
-                                    {/* Problem & Solution Mini (Opsional, kalau mau ditampilin detail) */}
-                                    {/* <div className="pt-2 border-t border-white/5">
-                                        <p className="text-xs text-gray-500"><span className="text-red-400 font-bold">Problem:</span> {project.problem}</p>
-                                    </div> */}
+                                    {project.partners && project.partners.length > 0 && (
+                                        <div className="pt-2">
+                                            <p className="text-xs text-gray-500 mb-2 font-medium">Co-developed with:</p>
+                                            <div className="flex flex-wrap gap-3">
+                                                {project.partners.map((partner, pIdx) => (
+                                                    <a 
+                                                        key={pIdx}
+                                                        href={partner.linkedin}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-blue-400 transition-colors"
+                                                    >
+                                                        <FaLinkedin size={14} />
+                                                        {partner.name}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Tech Stack */}
                                 <div className="flex flex-wrap gap-2 mb-6">
                                     {project.stack.map((tech, i) => (
-                                        <span key={i} className="text-xs text-gray-400 border border-gray-700 px-2 py-1 rounded hover:border-blue-500 transition-colors cursor-default">
+                                        <span key={i} className="text-xs font-medium text-gray-300 bg-white/5 border border-gray-700 px-2 py-1 rounded hover:bg-white/10 hover:border-gray-500 transition-colors cursor-default">
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
 
-                                {/* Links */}
                                 <div className="flex gap-4 mt-auto pt-4 border-t border-white/5">
                                     {project.links.demo ? (
                                         <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-blue-400 hover:text-blue-300 transition">
@@ -135,7 +190,7 @@ const Projects: React.FC = () => {
                                         </a>
                                     ) : (
                                         <span className="flex items-center gap-2 text-sm font-bold text-gray-600 cursor-not-allowed">
-                                            <FaExternalLinkAlt /> Offline
+                                            <FaExternalLinkAlt /> Offline / Private
                                         </span>
                                     )}
                                     

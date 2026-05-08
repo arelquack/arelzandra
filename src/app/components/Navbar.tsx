@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaBars, FaTimes, FaDownload } from "react-icons/fa";
+import { FaBars, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,10 +38,12 @@ const Navbar: React.FC = () => {
                     
                     {/* Resume Button (Kecil di Navbar) */}
                     <a 
-                        href="https://drive.google.com/uc?export=download&id=1fAXZPtR3pNAYOj4-usGyHeCC3uPO_9Pl"
+                        href="https://drive.google.com/file/d/12io5xiNZb28nr_xbRPaMY8xxm8hx7gRZ/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2"
                     >
-                        <FaDownload size={10} /> Resume
+                        <FaExternalLinkAlt size={10} /> View Resume
                     </a>
                 </div>
 
@@ -63,10 +65,12 @@ const Navbar: React.FC = () => {
                     <a href="/blog" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Blog</a>
                     <hr className="border-gray-700"/>
                     <a 
-                        href="https://drive.google.com/uc?export=download&id=1fAXZPtR3pNAYOj4-usGyHeCC3uPO_9Pl"
-                        className="text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition"
+                        href="https://drive.google.com/file/d/12io5xiNZb28nr_xbRPaMY8xxm8hx7gRZ/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition"
                     >
-                        Download Resume
+                        <FaExternalLinkAlt size={14} /> View Resume
                     </a>
                 </div>
             )}
