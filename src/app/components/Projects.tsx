@@ -32,7 +32,7 @@ const projects: Project[] = [
         ],
         links: {
             demo: null, 
-            repo: "https://github.com/arelquack/votex"
+            repo: null
         }
     },
     {
@@ -53,7 +53,7 @@ const projects: Project[] = [
         ],
         links: {
             demo: null,
-            repo: "https://github.com/arelquack/newlymom"
+            repo: null
         }
     },
     {
@@ -70,7 +70,7 @@ const projects: Project[] = [
         ],
         links: {
             demo: "https://adkes-himakom.vercel.app",
-            repo: "https://github.com/arelquack/adkes-webapp"
+            repo: null
         }
     },
     {
@@ -91,7 +91,7 @@ const projects: Project[] = [
         ],
         links: {
             demo: null,
-            repo: "https://github.com/arelquack/rekamedchain"
+            repo: null
         }
     },
     {
@@ -102,7 +102,7 @@ const projects: Project[] = [
         stack: ["Next.js", "TypeScript", "Supabase", "Vercel"],
         links: {
             demo: "https://nk-project.vercel.app",
-            repo: "https://github.com/arelquack/nk-project"
+            repo: null
         }
     }
 ];
@@ -195,9 +195,9 @@ const Projects: React.FC = () => {
                                     )}
                                     
                                     {project.links.repo && (
-                                        <a href={project.links.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition">
-                                            <FaGithub size={16} /> Code
-                                        </a>
+                                            <a href={project.links.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition">
+                                                <FaGithub size={16} /> Code
+                                            </a>
                                     )}
                                 </div>
                             </div>

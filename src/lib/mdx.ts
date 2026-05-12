@@ -19,62 +19,71 @@ function slugify(text: string) {
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')        // Ganti spasi jadi -
-    .replace(/[^\w\-]+/g, '')    // Hapus karakter aneh (misal: ?, !, :)
-    .replace(/\-\-+/g, '-');     // Hapus dash ganda
+    .replace(/\s+/g, '-')         // Ganti spasi jadi -
+    .replace(/[^\w\-]+/g, '')     // Hapus karakter non-alfanumerik
+    .replace(/\-\-+/g, '-');      // Hapus dash ganda
 }
 
-// 2. Ambil Semua Post (Sekarang slug-nya dari Title)
-export function getSortedPostsData() {
-  if (!fs.existsSync(postsDirectory)) {
-    return [];
-  }
+/**
+ * 2. Ambil Semua Post berdasarkan Bahasa
+ * @param lang - 'id' | 'en' | 'ja'
+ */
+export function getSortedPostsData(lang: string = 'id') {
+  if (!fs.existsSync(postsDirectory)) return [];
 
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data } = matter(fileContents);
 
-    // SLUG DIBUAT DARI TITLE DI SINI
-    const slug = slugify(data.title || ''); 
+  const allPostsData = fileNames
+    .filter((fileName) => fileName.endsWith(`.${lang}.mdx`))
+    .map((fileName) => {
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const { data } = matter(fileContents);
 
-    return {
-      slug,
-      fileName, // Simpan nama file asli biar gampang dicari nanti
-      ...(data as Omit<PostMeta, 'slug' | 'fileName'>),
-    };
-  });
+      // PERBAIKAN: Slug diambil dari nama file, bukan title
+      // Contoh: "kenapa-aldi-taher.en.mdx" -> slug: "kenapa-aldi-taher"
+      const slug = fileName.replace(/\.(id|en|ja)\.mdx$/, '');
 
-  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+      return {
+        slug,
+        fileName,
+        ...(data as Omit<PostMeta, 'slug' | 'fileName'>),
+      };
+    });
+
+  return allPostsData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-// 3. Ambil Satu Post Berdasarkan Slug (Logic Baru: Cari yg cocok)
-export function getPostData(slug: string) {
-  // Ambil semua data dulu buat dicocokin
-  const allPosts = getSortedPostsData();
-  
-  // Cari postingan yang slug-nya sama dengan request URL
-  const post = allPosts.find((p) => p.slug === slug);
+/**
+ * 3. Ambil Satu Post Berdasarkan Slug dan Bahasa
+ * Digunakan di page [slug] untuk merender konten
+ */
+export function getPostData(slug: string, lang: string = 'id') {
+  const languages = [lang, 'id', 'en', 'ja']; // Urutan pencarian
+  let post;
+  let currentLang = lang;
+
+  for (const l of languages) {
+    const allPosts = getSortedPostsData(l);
+    post = allPosts.find((p) => p.slug === slug);
+    if (post) {
+      currentLang = l;
+      break;
+    }
+  }
 
   if (!post) {
     throw new Error(`Post not found for slug: ${slug}`);
   }
 
-  // Baca file berdasarkan 'fileName' asli yang udah kita simpan tadi
   const fullPath = path.join(postsDirectory, post.fileName);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
   return {
     slug,
-    meta: {
-      ...data,
-      title: data.title,
-      date: data.date,
-      description: data.description,
-      tags: data.tags,
-    } as Omit<PostMeta, 'slug' | 'fileName'>,
+    lang: currentLang,
+    meta: data as Omit<PostMeta, 'slug' | 'fileName'>,
     content,
   };
 }
