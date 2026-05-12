@@ -11,7 +11,7 @@ interface Props {
     searchParams: Promise<{ lang?: string }>;
 }
 
-// 1. Generate Static Params (Mendukung semua bahasa agar build-nya aman)
+// 1. Generate Static Params
 export async function generateStaticParams() {
     const languages = ['id', 'en', 'ja'];
     const allParams = [];
@@ -50,22 +50,33 @@ export default async function PostPage({ params, searchParams }: Props) {
     
     let post;
     try {
-        // Mengambil data berdasarkan slug dan bahasa dari query string (?lang=...)
         post = getPostData(slug, lang);
     } catch (e) {
-        // Jika tidak ketemu di bahasa tersebut, lempar ke 404
         return notFound();
     }
 
     const { meta, content } = post;
+
+    // Fungsi untuk format tanggal sesuai bahasa (Lokalisasi)
+    const formatDisplayDate = (dateString: string, currentLang: string) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+
+        return date.toLocaleDateString(currentLang === 'ja' ? 'ja-JP' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
 
     return (
         <div className="min-h-screen bg-[#050505] text-white">
             <Navbar />
 
             <main className="container mx-auto px-6 pt-32 pb-20 max-w-3xl">
-                <Link href="/blog" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
-                    <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Blog
+                <Link href={`/blog?lang=${lang}`} className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
+                    <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" /> 
+                    Back to Blog
                 </Link>
 
                 {/* Header Artikel */}
@@ -75,10 +86,11 @@ export default async function PostPage({ params, searchParams }: Props) {
                     </h1>
                     
                     <div className="flex flex-wrap justify-center items-center gap-3 text-gray-500 text-sm">
-                        <span>{meta.date}</span>
+                        {/* Tanggal otomatis berubah format kalau bahasa Jepang */}
+                        <span>{formatDisplayDate(meta.date, lang)}</span>
                         <span className="hidden sm:inline">•</span>
                         <div className="flex flex-wrap justify-center gap-2">
-                            {meta.tags.map((tag: string) => (
+                            {meta.tags?.map((tag: string) => (
                                 <span key={tag} className="text-xs font-medium text-gray-300 bg-white/5 border border-gray-800 px-2 py-1 rounded cursor-default">
                                     #{tag}
                                 </span>

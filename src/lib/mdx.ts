@@ -13,7 +13,9 @@ export type PostMeta = {
   fileName: string;
 };
 
-// 1. Fungsi pembuat Slug (Lowercase + Dash)
+/**
+ * 1. Fungsi pembuat Slug (Hanya digunakan jika ingin normalisasi teks tertentu)
+ */
 function slugify(text: string) {
   return text
     .toString()
@@ -34,32 +36,42 @@ export function getSortedPostsData(lang: string = 'id') {
   const fileNames = fs.readdirSync(postsDirectory);
 
   const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith(`.${lang}.mdx`))
+    .filter((fileName) => fileName.endsWith(`.${lang}.mdx`)) // Hanya ambil file dengan akhiran bahasa yang sesuai
     .map((fileName) => {
       const fullPath = path.join(postsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
 
-      // PERBAIKAN: Slug diambil dari nama file, bukan title
-      // Contoh: "kenapa-aldi-taher.en.mdx" -> slug: "kenapa-aldi-taher"
+      // PERBAIKAN UTAMA: Slug diambil dari nama file agar URL tetap Romaji meski judulnya Kanji
+      // Contoh: "aldi-taher.ja.mdx" -> slug: "aldi-taher"
       const slug = fileName.replace(/\.(id|en|ja)\.mdx$/, '');
 
       return {
         slug,
         fileName,
-        ...(data as Omit<PostMeta, 'slug' | 'fileName'>),
+        // Fallback data agar tidak undefined saat diakses di Client Component
+        title: data.title || "Untitled",
+        date: data.date || "",
+        description: data.description || "",
+        tags: Array.isArray(data.tags) ? data.tags : [],
+        ...data, 
       };
     });
 
-  return allPostsData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Urutkan berdasarkan tanggal terbaru
+  return allPostsData.sort((a, b) => {
+    const dateA = new Date(a.date || 0).getTime();
+    const dateB = new Date(b.date || 0).getTime();
+    return dateB - dateA;
+  });
 }
 
 /**
  * 3. Ambil Satu Post Berdasarkan Slug dan Bahasa
- * Digunakan di page [slug] untuk merender konten
  */
 export function getPostData(slug: string, lang: string = 'id') {
-  const languages = [lang, 'id', 'en', 'ja']; // Urutan pencarian
+  // Urutan pencarian: bahasa yang diminta -> indonesia -> inggris -> jepang
+  const languages = [lang, 'id', 'en', 'ja'];
   let post;
   let currentLang = lang;
 
@@ -83,7 +95,13 @@ export function getPostData(slug: string, lang: string = 'id') {
   return {
     slug,
     lang: currentLang,
-    meta: data as Omit<PostMeta, 'slug' | 'fileName'>,
+    meta: {
+      title: data.title || "Untitled",
+      date: data.date || "",
+      description: data.description || "",
+      // Proteksi agar .map() di page [slug] tidak error
+      tags: Array.isArray(data.tags) ? data.tags : [],
+    },
     content,
   };
 }

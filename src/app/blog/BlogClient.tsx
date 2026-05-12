@@ -30,6 +30,25 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
   const [selectedTag, setSelectedTag] = useState("All");
   const [sortOrder, setSortOrder] = useState("newest");
 
+  // Fungsi helper untuk memformat tanggal sesuai bahasa yang dipilih
+  const formatDate = (dateString: string, currentLang: string) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+
+    if (currentLang === 'ja') {
+      return date.toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    }
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
   // Pilih dataset berdasarkan bahasa yang aktif
   const allPosts = useMemo(() => {
     if (lang === 'en') return postsEn;
@@ -46,33 +65,53 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
   // Ambil semua tag unik dari post yang aktif
   const allTags = useMemo(() => {
     const tags = new Set<string>(["All"]);
-    allPosts.forEach((post) => post.tags.forEach((tag) => tags.add(tag)));
+    allPosts.forEach((post) => {
+      post.tags?.forEach((tag) => tags.add(tag));
+    });
     return Array.from(tags);
   }, [allPosts]);
 
   // Logika Filter, Search, dan Sorting
   const filteredPosts = useMemo(() => {
     let results = allPosts.filter((post) => {
-      const matchesSearch =
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesTag =
-        selectedTag === "All" || post.tags.includes(selectedTag);
+      const title = post.title?.toLowerCase() || "";
+      const description = post.description?.toLowerCase() || "";
+      const search = searchQuery.toLowerCase();
+
+      const matchesSearch = title.includes(search) || description.includes(search);
+      const matchesTag = selectedTag === "All" || (post.tags?.includes(selectedTag) ?? false);
+      
       return matchesSearch && matchesTag;
     });
 
     return results.sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
+      const dateA = new Date(a.date || 0).getTime();
+      const dateB = new Date(b.date || 0).getTime();
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
     });
   }, [allPosts, searchQuery, selectedTag, sortOrder]);
 
   return (
     <>
+      {/* Header Dinamis */}
+      <div className="mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+          {lang === 'ja' ? 'ライティング' : lang === 'en' ? 'Writing' : 'Sudut'}{" "}
+          <span className="text-glow-gradient">
+            {lang === 'ja' ? 'コーナー' : lang === 'en' ? 'Corner' : 'Tulisan'}
+          </span>
+        </h1>
+        <p className="text-gray-400 text-lg">
+          {lang === 'ja' 
+            ? '技術, チュートリアル, そして日常の考え。' 
+            : lang === 'en' 
+            ? 'Sharing my journey in tech, tutorials, and random thoughts.' 
+            : 'Berbagi perjalanan di dunia teknologi, tutorial, dan pemikiran acak.'}
+        </p>
+      </div>
+
       {/* Language & Sort Toolbar */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        {/* Language Switcher */}
         <div className="bg-white/5 border border-gray-800 p-1 rounded-xl flex gap-1">
           {[
             { code: 'id', label: 'ID' },
@@ -93,13 +132,17 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
           ))}
         </div>
 
-        {/* Sort Button */}
         <button
           onClick={() => setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))}
           className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors bg-white/5 border border-gray-800 px-4 py-2 rounded-lg"
         >
           {sortOrder === "newest" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-          {sortOrder === "newest" ? "Latest" : "Oldest"}
+          {/* Label Sortir Dinamis */}
+          {lang === 'ja' 
+            ? (sortOrder === "newest" ? "最新順" : "古い順") 
+            : lang === 'en' 
+            ? (sortOrder === "newest" ? "Latest" : "Oldest") 
+            : (sortOrder === "newest" ? "Terbaru" : "Terlama")}
         </button>
       </div>
 
@@ -151,14 +194,14 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
                     {post.title}
                   </h2>
                   <span className="shrink-0 text-xs md:text-sm text-gray-500 border border-gray-800 px-3 py-1 rounded-full w-fit bg-black/20">
-                    {post.date}
+                    {formatDate(post.date, lang)}
                   </span>
                 </div>
                 <p className="text-gray-400 leading-relaxed mb-6 text-sm md:text-base">
                   {post.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
+                  {post.tags?.map((tag) => (
                     <span
                       key={tag}
                       className="text-xs font-medium text-gray-500 bg-white/5 border border-gray-800 px-2 py-1 rounded"

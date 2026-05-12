@@ -9,8 +9,7 @@ export const metadata = {
 };
 
 export default function BlogPage() {
-  // Mengambil data dari file sistem di lingkungan Server
-  // 'fs' akan berjalan aman di sini
+  // Mengambil data dari file sistem di lingkungan Server untuk ketiga bahasa
   const postsId = getSortedPostsData('id');
   const postsEn = getSortedPostsData('en');
   const postsJa = getSortedPostsData('ja');
@@ -20,17 +19,8 @@ export default function BlogPage() {
       <Navbar />
       
       <main className="container mx-auto px-6 pt-32 pb-20 max-w-4xl">
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-            Writing <span className="text-glow-gradient">Corner</span>
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Sharing my journey in tech, tutorials, and random thoughts.
-          </p>
-        </div>
-
-        {/* Mengirimkan ketiga dataset bahasa ke Client Component.
-          User bisa berpindah bahasa secara instan di sisi client.
+        {/* Header "Writing Corner" sekarang ada di dalam BlogClient 
+            agar teks judul & deskripsinya ikut berubah saat user ganti bahasa.
         */}
         <BlogClient 
           postsId={postsId} 
