@@ -1,0 +1,136 @@
+---
+title: 'Seni Mapping Data - Mengubah JSON Kaku Menjadi UI yang Hidup'
+date: 'May 14, 2026'
+description: 'Backend udah ngirim data, terus di Frontend diapain? Ini panduan praktis nampilin, memilah, dan mendandani data dari server.'
+tags: ['frontend', 'react', 'mapping', 'ui-ux']
+---
+
+Sebagai developer Backend, kamu mungkin terbiasa melihat data dalam bentuk raw JSON di terminal atau Postman. Sesuatu yang bentuknya kaku seperti ini:
+
+```json
+[
+  { "id": 1, "menu": "Ayam Geprek Asoka", "harga": 15000, "is_sold_out": false, "level_pedas": 5 },
+  { "id": 2, "menu": "Ayam Geprek 71", "harga": 17000, "is_sold_out": true, "level_pedas": 10 }
+]
+
+```
+
+Tugas utama Frontend adalah mengambil JSON tersebut dan "menjahitnya" ke dalam elemen visual (HTML/CSS). Proses penjahitan inilah yang disebut dengan **Mapping**.
+
+Tapi di dunia nyata, *mapping* tidak sesederhana melakukan *looping* biasa. Frontend harus pintar-pintar memoles data mentah itu agar ramah untuk mata manusia (*User Experience*).
+
+Mari kita bedah 4 teknik utama yang selalu dipakai Frontend saat menerima data dari Backend.
+
+### 1. The Core: Looping dengan `.map()`
+
+Di JavaScript (khususnya React/Next.js), kita tidak menggunakan `for` atau `while` loop untuk mencetak elemen ke layar. Kita menggunakan metode bawaan array yaitu `.map()`.
+
+Fungsi ini akan "menyapu" seluruh isi *array* dari Backend, dan menyulap setiap baris datanya menjadi komponen visual.
+
+```tsx
+function DaftarMenu({ dataDariBackend }) {
+  return (
+    <div className="grid">
+      {/* Kita mapping array datanya di sini */}
+      {dataDariBackend.map((item) => (
+        <div key={item.id} className="kartu-menu">
+          <h3>{item.menu}</h3>
+          <p>Level Pedas: {item.level_pedas}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+```
+
+**Aturan Emas:** Perhatikan atribut `key={item.id}`. Setiap kali melakukan *mapping*, React mewajibkan kita memberikan KTP (ID unik) pada elemen terluar hasil *mapping*. Ini agar React tidak kebingungan saat ada satu elemen yang dihapus atau diedit di masa depan.
+
+### 2. Conditional Rendering (Logika "Jika-Maka" di UI)
+
+Di Backend, kamu mungkin pakai `if-else` untuk validasi bisnis. Di Frontend, kita pakai *Conditional Rendering* untuk mengubah wajah UI berdasarkan nilai dari data.
+
+Misal, kita ingin menampilkan label 🔥 jika level pedas di atas 5, dan label "Habis!" jika `is_sold_out` bernilai `true`. Kita menggunakan *Ternary Operator* (`kondisi ? benar : salah`) atau *Logical AND* (`kondisi && benar`).
+
+```tsx
+<div key={item.id} className="kartu-menu">
+  <h3>
+    {item.menu} 
+    {/* Logical AND: Jika level > 5, tampilkan api */}
+    {item.level_pedas > 5 && <span> 🔥 Super Pedas!</span>}
+  </h3>
+  
+  {/* Ternary Operator: Cek status stok */}
+  {item.is_sold_out ? (
+    <span className="badge-merah">Maaf, Habis!</span>
+  ) : (
+    <span className="badge-hijau">Tersedia</span>
+  )}
+</div>
+
+```
+
+Dengan teknik ini, UI kita tidak statis. Ia bereaksi dan berubah warna secara otomatis mengikuti *state* yang dikirimkan oleh Backend.
+
+### 3. Empty States (Menangani Data Kosong)
+
+Salah satu *blind spot* (titik buta) yang sering dilupakan developer adalah: **Gimana kalau Backend mengirim array kosong `[]`?**
+
+Jika dari Backend datanya habis atau pencarian tidak ditemukan, Backend akan dengan santai mereturn HTTP 200 OK dengan isi `[]`. Jika Frontend tidak menangani ini, layar hanya akan putih melompong. *User* akan mengira aplikasinya *error*.
+
+Sebagai Frontend yang baik, kita harus memetakan kondisi kosong ini menjadi **Empty State** yang komunikatif.
+
+```tsx
+function DaftarMenu({ dataDariBackend }) {
+  // Cek apakah data dari BE beneran ada isinya
+  if (dataDariBackend.length === 0) {
+    return (
+      <div className="layar-tengah">
+        <img src="/gambar-piring-kosong.png" alt="Kosong" />
+        <h2>Wah, warungnya udah tutup atau menunya habis nih!</h2>
+        <p>Coba cari menu yang lain ya.</p>
+      </div>
+    );
+  }
+
+  // Jika ada isinya, baru jalankan .map()
+  return (
+    <div className="grid">
+      {dataDariBackend.map(item => ( /* ... render kartu ... */ ))}
+    </div>
+  );
+}
+
+```
+
+### 4. Data Formatting (Menerjemahkan Bahasa Mesin ke Manusia)
+
+Backend sering mengirim data dalam bentuk baku agar efisien di *database*.
+
+* Harga dikirim sebagai integer: `15000`
+* Tanggal dikirim sebagai ISO String: `"2026-05-14T01:27:52Z"`
+
+Frontend bertugas memformat (*formatting*) data baku tersebut sebelum dicetak ke layar. *User* tidak mau membaca angka `15000` yang sulit dihitung nolnya, mereka ingin melihat `Rp 15.000`.
+
+```tsx
+// Di Frontend, kita buat fungsi helper untuk memformat uang
+const formatRupiah = (angka) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    maximumFractionDigits: 0
+  }).format(angka);
+};
+
+// Penggunaannya saat mapping
+<p className="teks-harga">
+  {formatRupiah(item.harga)} {/* Output: Rp 15.000 */}
+</p>
+
+```
+
+### Kesimpulan
+
+Proses *Mapping* di Frontend bukan cuma sekadar memindahkan data dari kabel internet ke layar monitor. Ini adalah proses "menerjemahkan" niat dari Backend menjadi sesuatu yang bisa disentuh, dimengerti, dan dinikmati oleh mata pengguna akhir.
+
+Ketika kamu paham cara mengawinkan struktur JSON yang kamu buat di API dengan elemen UI yang dinamis di Frontend... saat itulah kamu mulai berpikir sebagai seorang *Full-Stack Engineer*.

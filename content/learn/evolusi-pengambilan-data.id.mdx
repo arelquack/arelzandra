@@ -1,0 +1,168 @@
+---
+title: 'Evolusi Pengambilan Data'
+date: 'May 14, 2026'
+description: 'Perjalanan panjang Frontend dalam meminta data ke Backend. Dari yang bikin nangis pas ngetik kodenya, sampai yang sekarang cuma butuh satu baris aja.'
+tags: ['history', 'web-development', 'frontend', 'storytelling']
+---
+
+Kalau kita ngomongin gimana cara Frontend minta data ke Backend, sejarahnya itu lumayan panjang dan penuh air mata, bro. 
+
+Dulu, buat nampilin tulisan "Halo Budi" dari *database* ke layar aja, *programmer* harus nulis kode yang panjangnya kayak surat cinta. Tapi sekarang? Kita hidup di era di mana *tools* udah sangat memanjakan kita.
+
+Istilah "fetch manual" yang sering kamu dengar itu merujuk pada masa-masa di mana kita harus ngurusin *semuanya* sendirian: status *loading*-nya, *error*-nya, sampai nyimpen datanya. 
+
+Mari kita menjelajahi waktu sebentar, melihat gimana teknologi ini berevolusi dari masa ke masa.
+
+---
+
+### Era 1: Zaman Batu (XMLHttpRequest)
+
+Bayangkan kita berada di pertengahan tahun 2000-an. Internet masih pakai modem yang bunyinya *tiet-tot-tiet-tot*, dan belum ada yang namanya React atau Next.js. 
+
+Saat itu, satu-satunya cara Javascript ngobrol sama server tanpa me-*refresh* seluruh halaman (*hard reload*) adalah pakai objek bernama `XMLHttpRequest` (XHR). Namanya aja udah susah dibaca, apalagi kodenya.
+
+Kodenya itu kaku, panjang, dan rawan banget *error* kalau kita salah naruh urutan.
+
+```javascript
+// Tahun 2005-an: Keringat dan Air Mata
+var xhr = new XMLHttpRequest();
+xhr.open('GET', '[https://api.restoran.com/menu](https://api.restoran.com/menu)', true);
+
+xhr.onreadystatechange = function () {
+  // Harus ngecek angka 4 dan 200. Hafalan wajib zaman dulu!
+  if (xhr.readyState === 4) {
+    if (xhr.status === 200) {
+      // Data datang masih bentuk teks kaku, harus di-parse manual
+      var data = JSON.parse(xhr.responseText);
+      console.log(data);
+    } else {
+      console.error('Yah, servernya ngambek');
+    }
+  }
+};
+
+xhr.send();
+
+```
+
+Saking ribetnya nulis kode ini berulang kali, muncullah *pahlawan* bernama **jQuery** dengan fungsi `$.ajax()`. Ini sangat membantu di zamannya, tapi tetap saja masih tergolong sangat manual.
+
+---
+
+### Era 2: Zaman Pencerahan (The Fetch API)
+
+Maju ke tahun 2015-an. Javascript berevolusi besar-besaran. Para pembuat standar web akhirnya sadar, *"Gila ya, masa mau minta data aja ribet banget pakai XHR."*
+
+Akhirnya mereka menciptakan fungsi bawaan *browser* yang jauh lebih manusiawi: `fetch()`. Di era ini juga lahir konsep *Promise* dan `async/await` yang bikin kode asinkron (nunggu balasan server) jadi terbaca seperti kode sinkron biasa.
+
+Ini adalah bentuk standar dari **"Fetch Manual"** di era modern.
+
+```javascript
+// Tahun 2015-an: Jauh Lebih Elegan
+async function getMenu() {
+  try {
+    const response = await fetch('[https://api.restoran.com/menu](https://api.restoran.com/menu)');
+    
+    // Cek error manual
+    if (!response.ok) {
+      throw new Error('Gagal ambil data');
+    }
+
+    // Parse JSON langsung dari response
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+```
+
+Kelihatan rapi kan? **TAPI TUNGGU DULU.**
+
+Masalah muncul ketika fungsi `fetch` ini dibawa masuk ke dalam *framework* UI modern seperti **React**. Di React, kita nggak cuma narik data, tapi layar harus menampilkan animasi *loading* saat menunggu, dan menampilkan pesan *error* kalau gagal.
+
+Karena `fetch` itu cuma "tukang pos", dia nggak peduli sama UI. Akhirnya, *programmer* React harus bikin State Management yang sangat repetitif (manual) di setiap halaman:
+
+```jsx
+// Realita "Fetch Manual" di dalam React (Sangat melelahkan)
+import { useState, useEffect } from 'react';
+
+function MenuRestoran() {
+  // 1. Bikin 3 state manual untuk tiap halaman!
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 2. Bikin efek samping buat narik API pas halaman dibuka
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('[https://api.restoran.com/menu](https://api.restoran.com/menu)')
+      .then(res => res.json())
+      .then(hasil => {
+        setData(hasil);
+        setIsLoading(false); // Matiin loading
+      })
+      .catch(err => {
+        setError(err.message);
+        setIsLoading(false); // Matiin loading juga
+      });
+  }, []); // <-- Lupa array kosong ini? Komputermu bisa hang karena infinity loop!
+
+  if (isLoading) return <p>Tunggu bentar ya, lagi masak...</p>;
+  if (error) return <p>Waduh: {error}</p>;
+
+  return <div>{data.map(item => <p key={item.id}>{item.nama}</p>)}</div>;
+}
+
+```
+
+Bayangkan kamu punya 30 halaman web, dan kamu harus nulis `useState` tiga biji dan `useEffect` sepanjang itu di setiap halamannya. Tangan keriting, *bro*.
+
+---
+
+### Era 3: Zaman Keajaiban (Server State Management)
+
+Sekitar tahun 2019 ke atas, *engineer* mulai sadar: *"Data dari API itu sebenernya bukan milik Frontend, itu data pinjaman dari Backend. Ngapain kita capek-capek ngatur state-nya secara manual?"*
+
+Lahirlah *tools* revolusioner yang disebut **Server State Management**, dengan dua pemain raksasa: **SWR (dari Vercel/Next.js)** dan **TanStack React Query**.
+
+Ini yang disebut sebagai **"Fetch Tidak Manual"** atau metode modern. *Tools* ini bekerja seperti manajer pintar di latar belakang. Kamu nggak perlu lagi nulis `useState` untuk *loading* dan *error*, nggak perlu pusing mikirin *caching* (nyimpen data sementara), dan nggak usah takut *infinity loop* di `useEffect`.
+
+Kodenya yang tadi panjang banget, sekarang menyusut jadi **satu baris**:
+
+```jsx
+// Era Modern: Tinggal Panggil Pakai React Query / SWR
+import { useQuery } from '@tanstack/react-query';
+
+function MenuRestoran() {
+  // Sang Manajer (React Query) mengambil alih semua kerjaan kotor!
+  // Loading, error, dan data otomatis diurusin.
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['menu-restoran'],
+    queryFn: () => fetch('[https://api.restoran.com/menu](https://api.restoran.com/menu)').then(res => res.json())
+  });
+
+  if (isLoading) return <p>Tunggu bentar ya, lagi masak...</p>;
+  if (error) return <p>Waduh: {error.message}</p>;
+
+  return <div>{data.map(item => <p key={item.id}>{item.nama}</p>)}</div>;
+}
+
+```
+
+**Kenapa ini disebut "Keajaiban"?**
+
+1. **Kode Jauh Lebih Bersih:** Nggak ada lagi tumpukan `useState` dan `useEffect`.
+2. **Auto-Caching:** Kalau *user* pindah ke halaman "Tentang Kami" lalu balik lagi ke halaman "Menu", React Query nggak akan nembak API lagi. Dia langsung nampilin data dari memori sementara (*cache*). Aplikasi jadi secepat kilat!
+3. **Background Refetching:** Kalau *user* ninggalin laptop buat bikin kopi, terus balik dan buka *tab* browsernya lagi, React Query otomatis *fetch* ulang secara diam-diam di *background* buat mastiin datanya nggak basi.
+
+---
+
+### Kesimpulan
+
+Evolusi ini mengajarkan satu hal: **Tujuan utama teknologi Frontend modern adalah menyembunyikan kerumitan.**
+
+Dari yang dulunya kita harus merakit `XMLHttpRequest` secara manual seperti montir menyambung kabel mobil, lalu naik level pakai `fetch()` yang seperti menyetir mobil manual, hingga sekarang kita punya *React Query* yang bertindak seperti fitur *Autopilot*.
+
+Kita tetap butuh si "tukang pos" (API Client / `fetch`), tapi kita ngga perlu lagi begadang semalaman cuma buat ngatur kapan *spinner loading* harus muter dan kapan harus berhenti. Semua sudah diotomatisasi!

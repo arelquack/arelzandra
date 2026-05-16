@@ -1,0 +1,137 @@
+---
+title: 'Cara Berpikir Ala Frontend Developer'
+date: 'May 14, 2026'
+description: 'Backend berurusan dengan request yang datang dan pergi. Frontend berurusan dengan UI yang hidup dan bernapas. Memori dan waktunya berjalan berbeda.'
+tags: ['fundamental', 'react', 'javascript', 'concept']
+---
+
+Sebagai developer Backend, kamu terbiasa hidup di dunia yang *stateless* (tidak menyimpan ingatan). 
+
+Alur kerjanya biasanya begini: *Request* masuk → jalankan fungsi → ambil data dari *database* → kirim *response* JSON → selesai. Memori dibersihkan. Server kembali tidur sampai ada *request* baru.
+
+Tapi di Frontend, aplikasinya **hidup**. Layarnya terus menyala. Pengguna bisa menggeser menu, mengetik form setengah jalan, lalu mengklik tombol *dark mode*, semuanya terjadi di satu tempat tanpa harus memuat ulang (*refresh*) halaman.
+
+Untuk bisa membangun aplikasi yang hidup seperti ini, *framework* modern (seperti React/Next.js) berdiri di atas tiga pilar konsep utama.
+
+### 1. Components & Props (Bermain Lego)
+
+Di Backend, kalau ada logika yang sering dipakai ulang, kamu akan memisahkannya menjadi sebuah `function`.
+
+Di Frontend, kita memisahkan elemen visual menjadi **Component**. Bayangkan *Component* ini seperti balok Lego. Tombol adalah satu balok Lego. Kartu profil adalah balok Lego lain. Kalau disatukan, mereka menjadi sebuah halaman utuh.
+
+```tsx
+// Ini adalah Component (Balok Lego)
+function TombolMerah({ teks }) {
+  return <button className="bg-merah">{teks}</button>;
+}
+
+// Ini cara kita menyusun legonya
+function HalamanUtama() {
+  return (
+    <div>
+      <TombolMerah teks="Hapus Data" />
+      <TombolMerah teks="Keluar" />
+    </div>
+  );
+}
+
+```
+
+Perhatikan kata `teks` di atas? Itu yang disebut dengan **Props** (kependekan dari *Properties*).
+
+> **Analogi Backend:** *Props* itu sama persis dengan **Parameter** pada sebuah fungsi.
+
+*Props* digunakan untuk melempar data dari komponen induk (halaman) ke komponen anak (tombol). Sifat *Props* ini mutlak: anak tidak boleh mengubah *Props* yang diberikan oleh orang tuanya (Read-Only).
+
+### 2. State (Ingatan Jangka Pendek)
+
+Ini dia konsep yang sering bikin kaget anak Backend.
+
+Kalau di Javascript biasa, untuk menyimpan data kamu tinggal bikin variabel: `let angka = 0;`. Tapi di React, kalau kamu pakai variabel biasa, layarnya tidak akan pernah berubah (tidak re-render) meskipun nilai angkanya sudah bertambah!
+
+Kenapa? Karena React butuh "diberitahu" kalau ada perubahan, supaya dia bisa menggambar ulang layarnya. Di sinilah **State** (`useState`) masuk.
+
+> **Analogi Backend:** *State* itu ibarat *Database* kecil atau *Session* yang hidup eksklusif di dalam satu *Component*.
+
+```tsx
+import { useState } from 'react';
+
+function Penghitung() {
+  // angka = nilai saat ini
+  // setAngka = fungsi satu-satunya untuk mengubah nilai tersebut
+  const [angka, setAngka] = useState(0);
+
+  return (
+    <div>
+      <p>Kamu sudah klik {angka} kali.</p>
+      {/* Setiap tombol diklik, React disuruh menggambar ulang layar */}
+      <button onClick={() => setAngka(angka + 1)}>
+        Tambah
+      </button>
+    </div>
+  );
+}
+
+```
+
+Kapanpun `setAngka` dipanggil, React akan langsung bereaksi: *"Oh, nilai State berubah! Ayo kita perbarui tulisan di layar secara instan!"*
+
+### 3. Asynchronous: Promise dan Async/Await (Seni Menunggu)
+
+Sekarang kita masuk ke jantungnya Javascript.
+
+Di banyak bahasa Backend (seperti Python atau PHP tradisional), kode dieksekusi secara **Synchronous** (berurutan dari atas ke bawah). Kalau baris ke-5 adalah perintah membaca *database* yang butuh waktu 3 detik, maka baris ke-6 akan diam menunggu sampai baris ke-5 selesai.
+
+Javascript **TIDAK BISA** melakukan itu.
+Javascript berjalan di *Single Thread* (satu jalur). Kalau Javascript dipaksa diam menunggu balasan API dari Backend selama 3 detik, seluruh *browser* pengguna akan *hang* (berhenti total) selama 3 detik. Pengguna tidak bisa *scroll*, tidak bisa klik apapun. Bencana!
+
+Maka, diciptakanlah sistem **Asynchronous** (Tugas Latar Belakang). Javascript menggunakan sistem "Struk Antrean" yang bernama **Promise** (Janji).
+
+Bayangkan kamu memesan kopi di kafe yang ramai:
+
+1. Kamu pesan kopi ke kasir (`fetch API`).
+2. Kasir tidak menyuruhmu berdiri diam di depan mesin kasir sampai kopinya jadi.
+3. Kasir memberimu **struk nomor antrean** (Ini adalah `Promise`).
+4. Kamu bisa duduk, main HP, ngobrol (*browser* tetap bisa di-*scroll* dan diklik).
+5. Ketika kopi selesai, namamu dipanggil (Promise berstatus *Resolved/Fulfilled*).
+
+Awalnya, penulisan struk antrean ini bentuknya sedikit membingungkan (pakai `.then()` dan `.catch()`).
+
+```javascript
+// Cara lama mengurus antrean
+fetch('[https://api.com/kopi](https://api.com/kopi)')
+  .then((struk) => struk.ambilKopi())
+  .catch((error) => console.log("Mesin kopinya rusak"));
+
+```
+
+Karena *programmer* butuh sesuatu yang lebih rapi dan terlihat seperti kode Backend pada umumnya, diciptakanlah sintaks **`async / await`**.
+
+```javascript
+// Cara modern mengurus antrean (Jauh lebih rapi!)
+async function pesanKopi() {
+  try {
+    // await artinya: "Javascript, tolong kerjain ini di background ya, 
+    // nanti kabari kalau udah selesai. Layar jangan sampai hang!"
+    const struk = await fetch('[https://api.com/kopi](https://api.com/kopi)');
+    const kopi = await struk.ambilKopi();
+    console.log(kopi);
+  } catch (error) {
+    console.log("Mesin kopinya rusak");
+  }
+}
+
+```
+
+Kata kunci `await` pada dasarnya adalah sihir Javascript yang membungkus *struk antrean* tadi agar terlihat seolah-olah berjalan berurutan, padahal sebenarnya ia berjalan di latar belakang tanpa mengganggu kenyamanan pengguna.
+
+### Kesimpulan
+
+Berpikir ala Frontend adalah tentang mengelola waktu dan memori di depan mata pengguna.
+
+* Kita menyusun balok **Component** agar rapi.
+* Kita memberikan **Props** agar baloknya bisa saling berkomunikasi.
+* Kita menyimpan **State** agar aplikasinya bisa bereaksi secara instan.
+* Dan kita menggunakan **Async/Await** agar aplikasi tidak pernah *hang* saat sedang menunggu kiriman data dari kamu (orang Backend).
+
+Saat kamu sudah terbiasa dengan ritme ini, transisi dari Backend ke Frontend hanya tinggal masalah menghafal nama *function* saja!

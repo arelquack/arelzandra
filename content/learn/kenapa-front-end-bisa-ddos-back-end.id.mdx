@@ -1,0 +1,130 @@
+---
+title: 'Kenapa Frontend Bisa DDoS Backend-nya Sendiri?'
+date: 'May 14, 2026'
+description: 'Di Backend, sebuah fungsi hidup sebentar lalu mati. Di Frontend, komponen punya nyawa. Kalau kamu salah ngurus nyawanya, servermu bisa meledak.'
+tags: ['react', 'useeffect', 'lifecycle', 'fundamental']
+---
+
+Sebagai developer Backend, kamu terbiasa dengan siklus hidup program yang sangat singkat dan linier.
+
+Sebuah *request* masuk ke `APIRouter` FastAPI → fungsi dieksekusi → ambil data → *return* JSON → fungsi selesai dan mati di memori. Umurnya cuma beberapa milidetik.
+
+Tapi di dunia Frontend (React/Next.js), sebuah komponen visual itu **memiliki nyawa**. Ia lahir (muncul di layar), ia hidup (berubah warna, berganti teks), dan pada akhirnya ia mati (pindah ke halaman lain).
+
+Nah, karena dia "hidup" lebih lama, ada hal-hal yang harus dia lakukan di luar sekadar menggambar UI. Misalnya: memasang *timer*, mendengarkan pesan dari WebSocket, atau mengambil data. Hal-hal di luar penggambaran UI ini disebut **Side Effects (Efek Samping)**.
+
+Dan alat ukur detak jantungnya di React bernama **`useEffect`**. 
+
+Mari kita bedah 3 fase kehidupan komponen dan jebakan maut yang sering memakan korban para developer Backend.
+
+### 1. Kelahiran (Mounting)
+
+Bayangkan kamu punya halaman "Dashboard". Saat *user* mengeklik tombol masuk ke Dashboard, komponen itu "lahir" atau menempel ke layar (*mount*).
+
+Seringkali, **tepat saat dia lahir**, kamu ingin dia melakukan sesuatu sekali saja. Misalnya: memanggil API untuk mendapatkan data profil, atau memulai *stopwatch*.
+
+```tsx
+import { useEffect } from 'react';
+
+function Dashboard() {
+  // useEffect menerima dua hal: (1) Fungsi, (2) Array Ketergantungan
+  useEffect(() => {
+    console.log("Komponen Dashboard Lahir!");
+    // Tempat yang pas buat nge-fetch data pertama kali
+    // atau buka koneksi WebSocket.
+  }, []); // <-- ARRAY KOSONG
+
+  return <h1>Halo, selamat datang!</h1>;
+}
+
+```
+
+**Perhatikan Array Kosong `[]` di ujung bawah!**
+Ini adalah instruksi krusial yang artinya: *"Tolong jalankan efek samping ini HANYA SEKALI saja seumur hidupnya, yaitu saat dia pertama kali lahir."*
+
+### 2. Kehidupan & Bereaksi (Updating) - Tragedi DDoS
+
+Sekarang, mari kita bahas kesalahan nomor satu yang dilakukan oleh 99% orang Backend di hari pertama mereka belajar React.
+
+Di React, komponen akan **digambar ulang (Re-render)** setiap kali State-nya berubah.
+Nah, banyak yang lupa menaruh Array Kosong `[]`, atau malah menaruh fungsi `fetch` langsung di tengah-tengah komponen tanpa pelindung `useEffect`.
+
+```tsx
+function DaftarPengguna() {
+  const [users, setUsers] = useState([]);
+
+  // BENCANA DIMULAI DI SINI (Lupa pakai array kosong)
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        setUsers(data); // <--- State diubah!
+      });
+  }); 
+
+  return <div>{users.length} pengguna</div>;
+}
+
+```
+
+**Apa yang terjadi dengan kode di atas?**
+
+1. Komponen lahir.
+2. `useEffect` jalan, lalu menembak `/api/users`.
+3. Datanya dapat, lalu memanggil `setUsers(data)`.
+4. Karena *State* berubah, React berkata: *"Wah ada data baru! Ayo kita gambar ulang komponennya dari atas!"*
+5. Komponen digambar ulang.
+6. Karena digambar ulang, `useEffect` terpicu *lagi*.
+7. Menembak `/api/users` *lagi*.
+8. `setUsers(data)` dipanggil *lagi*.
+9. React menggambar ulang *lagi*.
+10. ...dan begitu terus dalam hitungan milidetik. *Infinity Loop*.
+
+Selamat! Aplikasi Frontend-mu baru saja melakukan serangan DDoS (mengirim ribuan *request* tanpa henti) ke server Backend-mu sendiri wkwkwk. Server kejang-kejang, laptop pengguna mengaum panas, dan *database* menangis.
+
+Itulah kenapa `useEffect` disebut **Efek Samping**. Kamu mengontrol kapan efek itu boleh berjalan lewat Array Ketergantungan (*Dependency Array*).
+
+```tsx
+// "Hanya tembak API lagi JIKA ID organisasinya berubah!"
+useEffect(() => {
+  fetch(`/api/users?org=${orgId}`);
+}, [orgId]); // <-- Array Ketergantungan
+
+```
+
+### 3. Kematian (Unmounting)
+
+Fase terakhir adalah ketika komponen itu harus mati atau dihancurkan. Misalnya, *user* pindah dari halaman "Dashboard" ke halaman "Pengaturan".
+
+Kalau waktu di fase "Kelahiran" kamu membuka koneksi WebSocket atau menyalakan `setInterval` (timer detik), kamu wajib mematikannya saat komponen itu mati. Kalau tidak, timer itu akan terus berjalan sebagai "hantu" di memori *browser* (*Memory Leak*).
+
+Cara memberitahu komponen untuk bersih-bersih sebelum mati adalah dengan memberikan **fungsi return** di dalam `useEffect`.
+
+```tsx
+function Stopwatch() {
+  useEffect(() => {
+    // 1. Saat komponen lahir: Nyalakan timer
+    const timerId = setInterval(() => {
+      console.log("Detak jantung...");
+    }, 1000);
+
+    // 2. Saat komponen akan mati: Bersihkan timer-nya!
+    return () => {
+      console.log("Komponen mati, timer dihancurkan.");
+      clearInterval(timerId);
+    };
+  }, []);
+
+  return <h1>Lagi ngitung waktu nih...</h1>;
+}
+
+```
+
+### Kesimpulan
+
+Transisi *mindset* dari BE ke FE bukan sekadar belajar sintaks baru, tapi belajar mengelola **Waktu** dan **Siklus Hidup**.
+
+Di Backend, kamu fokus pada skalabilitas *request* yang datang dan pergi dengan cepat.
+Di Frontend, kamu seperti merawat tanaman hias di dalam pot (Layar). Kamu menanamnya (*Mount*), menyiramnya saat ada perubahan cuaca (*Update/Dependency*), dan membuang daun keringnya saat ia layu agar potnya tetap bersih (*Unmount/Cleanup*).
+
+Dan tolong, demi kedamaian server, jangan pernah lupakan Array Kosong di `useEffect`-mu wkwkwk!

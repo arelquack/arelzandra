@@ -33,8 +33,8 @@ const Navbar: React.FC = () => {
                 <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-300 items-center">
                     <a href="#home" className="hover:text-blue-400 hover:scale-105 transition-all">Home</a>
                     <a href="#skills" className="hover:text-blue-400 hover:scale-105 transition-all">Skills</a>
-                    <a href="#projects" className="hover:text-blue-400 hover:scale-105 transition-all">Projects</a>
                     <a href="/blog" className="hover:text-blue-400 hover:scale-105 transition-all">Blog</a>
+                    <a href="/learn" className="hover:text-blue-400 hover:scale-105 transition-all">Learn</a>
                     
                     {/* Resume Button (Kecil di Navbar) */}
                     <a 
