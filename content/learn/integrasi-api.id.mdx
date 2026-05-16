@@ -1,23 +1,74 @@
 ---
 title: 'Integrasi API Frontend & Backend'
-description: 'Latihan interaktif memahami aliran data (State & Lifecycle) saat melakukan HTTP Request di React/Next.js.'
+description: 'Membongkar rahasia cara Frontend dan Backend ngobrol. Kita akan bedah arsitektur 4 lapis dengan bahasa manusia!'
 date: '2026-05-16'
 level: 'Intermediate'
+tags: ['react', 'nextjs', 'api', 'architecture']
 ---
 
-# Membangun Aplikasi Manajemen Aset
+# Menghubungkan Dua Dunia
 
-Dalam ekosistem Next.js modern, kita seringkali harus menghubungkan antarmuka pengguna (Frontend) dengan sumber data (Backend) melalui API. 
+Pernah nggak sih kamu ngerasa bingung pas dapet tugas, *"Tolong sambungin UI ini ke API backend ya!"*? 
 
-Proses ini melibatkan beberapa langkah krusial:
-1. **State Management**: Menyediakan wadah di dalam komponen React untuk menyimpan data yang datang dari server.
-2. **Lifecycle Hooks**: Mengatur kapan *request* ke server harus dilakukan (biasanya saat komponen pertama kali dirender menggunakan `useEffect`).
-3. **HTTP Methods**: Menggunakan metode yang tepat (`GET`, `POST`, `PATCH`, `DELETE`) sesuai dengan tindakan yang ingin dilakukan pengguna.
+Bagi kita yang baru belajar *Full-Stack*, menghubungkan antarmuka pengguna (Frontend) dengan sumber data (Backend) kadang terasa kayak *magic*. Tiba-tiba aja data muncul di layar. Padahal, kalau kita tahu jeroannya, proses ini sebenernya sangat logis dan bisa dibagi jadi tahapan yang jelas.
 
-## Tantangan Simulasi
+Biar gampang, **bayangin aja kamu lagi makan di restoran padang.** Kamu (Frontend) duduk manis di meja. Di dapur, koki (Backend/Database) masak rendang. Nah, pelayan yang mondar-mandir bawa pesanan kamu ke dapur dan bawa rendang ke mejamu? Itulah **API (*Application Programming Interface*)**.
 
-Untuk menguji pemahaman, mari kita bangun halaman UI Manajemen Aset secara bertahap. Jawablah 25 pertanyaan teknis di bawah ini dengan benar untuk **menyusun dan menghidupkan UI-nya secara otomatis**.
+---
+
+## 📖 Kamus
+
+Biar obrolan kita ke bawah makin nyambung, ini beberapa istilah teknis yang penting buat kamu ketahui:
+
+- **Endpoint**: URL tujuan. Kalau di restoran, ini ibarat "Nomor Meja". Ke mana data mau dikirim atau diambil? (contoh: `/api/aset`).
+- **Payload**: Isi paket atau "surat pesanan". Kalau kamu mau nambah barang baru, data barang itu dibungkus rapi jadi *payload* (biasanya berformat JSON) sebelum dikirim lewat pelayan (API).
+- **State**: "Ingatan jangka pendek" milik React. React itu pelupa. Kalau kamu mau dia inget data aset, kamu harus simpen di dalem *State* (`useState`). Kalau *State* berubah, React bakal otomatis ngegambar ulang layar.
+- **Two-Way Binding**: Jalan dua arah antara layar dan memori. Apa yang kamu ketik di kolom *input* otomatis tersimpan di otak program (*State*), dan apa yang ada di otak program otomatis tertampil di layar.
+- **Caching**: Ini trik pinter biar aplikasi nggak lemot. Bayangin kamu nanya jam ke orang sebelahmu. 5 detik kemudian kamu nanya lagi. Orang itu nggak perlu liat jam tangan lagi kan? Dia langsung jawab karena masih inget. *Caching* itu nyimpen data yang baru aja diambil dari server biar nggak usah bolak-balik nembak API kalau datanya belum berubah.
+
+---
+
+## 🛠️ Garis Besar: Arsitektur 4 Lapis (The Secret Sauce)
+
+Banyak pemula nulis semua logika—mulai dari narik data, muter-muter *loading*, sampai nampilin tombol—di dalam satu file yang sama. Hasilnya? Kode jadi berantakan alias *Spaghetti Code*.
+
+Biar kode kita rapi dan profesional, kita harus memisahkan aliran data ini jadi **4 Lapisan (*Layers*)**:
+
+1. **Kontrak Data (*Data Contract*)**: "Jabat tangan" antara Frontend dan Backend untuk menyepakati bentuk data (contohnya `interface` di TypeScript). Biar Frontend nggak salah panggil nama variabel.
+2. **Kurir Pengantar (*API Client*)**: Lapisan ini cuma peduli sama satu hal: ngirim *request* ke alamat yang bener, pakai metode HTTP yang pas (GET, POST, PATCH, DELETE), dan bawa balik datanya.
+3. **Otak & Ingatan (*Hooks & State*)**: Jantung integrasi! Kita pakai `useState` untuk nyimpen data, dan `useEffect` untuk ngasih *timing* kapan data harus ditarik.
+4. **Wajah Aplikasi (*UI Layer*)**: Lapisan HTML/CSS yang bertugas nampilin data dari Lapis 3 ke layar, dan nyediain tombol interaktif buat dipencet *user*.
+
+---
+
+## 📋 Briefing Misi: Pahami Kontrak Kita Dulu!
+
+Dalam *programming*, satu pertanyaan bisa punya banyak jawaban benar tergantung konteksnya. Biar kamu nggak salah tebak saat mengerjakan kuis di bawah, mari kita sepakati dulu "Kontrak Data" untuk aplikasi Manajemen Aset yang akan kita bangun:
+
+1. **Struktur Data (Interface)**
+   Kita sepakat menggunakan bahasa Indonesia untuk menjaga *domain knowledge* aplikasi lokal. Sebuah `Aset` wajib memiliki struktur ini:
+   ```typescript
+   interface Aset {
+     id: number;
+     nama: string;
+     kategori: string;
+     status: string; // Hanya berisi "tersedia" atau "dipinjam"
+   }
+    ```
+
+2. **Nama State (Memori React)**
+Untuk menyimpan daftar aset dari server, kita sepakat memberi nama statenya **`dataAset`**, dan fungsi pengubahnya **`setDataAset`**. Untuk indikator *loading*, kita gunakan **`isLoading`**.
+3. **Endpoint API (Alamat Server)**
+Server kita berjalan di rumah yang sama (Next.js Route Handlers). Jadi, pelayan (API Client) cukup mengantar paket ke alamat *relative*: **`/api/aset`**.
+
+---
+
+## 🚀 Misi Integrasi: Buktikan Pemahamanmu!
+
+Sudah paham kontraknya? Keren! Sekarang mari kita bangun UI-nya secara bertahap.
+
+Di bawah ini ada sebuah simulasi kode React. **Lengkapilah 25 baris rumpang (*TODO*)** secara berurutan sesuai kontrak di atas. Setiap kali jawabanmu benar, komponen UI di layar sebelah kanan akan **mulai terbangun, bertumbuh, dan akhirnya hidup!**
 
 <LatihanAsetQuizPage />
 
-Selamat, kamu sudah menguasai alur dasar integrasi API!
+> Kalau kamu udah berhasil buka semua UI-nya, jangan berhenti di situ. Coba ketik nama barang baru di *form* sebelah kanan, lalu klik "Simpan". Coba juga klik tombol *Toggle* (panah) dan tombol Hapus. Rasakan sensasi kodemu benar-benar ngobrol dengan *Live API Server*!
