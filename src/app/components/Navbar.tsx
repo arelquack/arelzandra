@@ -61,8 +61,8 @@ const Navbar: React.FC = () => {
                 <div className="absolute top-20 left-4 right-4 glass-nav rounded-2xl p-6 flex flex-col space-y-4 md:hidden animate-in fade-in slide-in-from-top-5 shadow-2xl border border-white/10">
                     <a href="#home" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Home</a>
                     <a href="#skills" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Skills</a>
-                    <a href="#projects" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Projects</a>
                     <a href="/blog" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Blog</a>
+                    <a href="/learn" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Learn</a>
                     <hr className="border-gray-700"/>
                     <a 
                         href="https://drive.google.com/file/d/12io5xiNZb28nr_xbRPaMY8xxm8hx7gRZ/view?usp=sharing"
