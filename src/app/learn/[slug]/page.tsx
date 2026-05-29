@@ -1,6 +1,7 @@
 // src/app/learn/[slug]/page.tsx
 
-import { getPostData, getSortedPostsData } from '@/lib/mdx'; // Sesuaikan dengan fungsi pembaca MDX learn lo
+// 1. UBAH IMPORT DI SINI: Gunakan getLearnData dan getSortedLearnData
+import { getLearnData, getSortedLearnData } from '@/lib/mdx'; 
 import ReactMarkdown from 'react-markdown';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
@@ -16,7 +17,6 @@ interface Props {
 
 /**
  * 1. Generate Static Params
- * Kita harus daftarkan slug kuis secara manual di sini, jika tidak Next.js akan melempar 404 saat build / dev!
  */
 export async function generateStaticParams() {
     const languages = ['id', 'en', 'ja'];
@@ -30,13 +30,13 @@ export async function generateStaticParams() {
     // Daftarkan juga seluruh slug dari file MDX learn lo yang sudah ada
     for (const lang of languages) {
         try {
-            const posts = getSortedPostsData(lang); // Asumsi mengambil data dari folder content/learn
-            const params = posts.map((post) => ({
-                slug: post.slug,
+            // 2. UBAH DI SINI: Gunakan getSortedLearnData
+            const learnModules = getSortedLearnData(lang); 
+            const params = learnModules.map((module) => ({
+                slug: module.slug,
             }));
             allParams.push(...params);
         } catch (e) {
-            // Taruh di dalam try-catch supaya jika salah satu folder bahasa kosong tidak merusak proses build
             console.log("No MDX files found for lang:", lang);
         }
     }
@@ -59,10 +59,11 @@ export async function generateMetadata({ params, searchParams }: Props) {
     }
 
     try {
-        const post = getPostData(slug, lang);
+        // 3. UBAH DI SINI: Gunakan getLearnData
+        const module = getLearnData(slug, lang);
         return {
-            title: `${post.meta.title} | Arel Zandra`,
-            description: post.meta.description,
+            title: `${module.meta.title} | Arel Zandra`,
+            description: module.meta.description,
         };
     } catch {
         return { title: 'Material Not Found | Arel Zandra' };
@@ -70,13 +71,12 @@ export async function generateMetadata({ params, searchParams }: Props) {
 }
 
 /**
- * 3. Component Utama (Mencegat rute kuis & merender MDX)
+ * 3. Component Utama
  */
 export default async function LearnDetailPage({ params, searchParams }: Props) {
     const { slug } = await params;
     const { lang = 'id' } = await searchParams;
     
-    // INTERCEPT: Jika slug mengarah ke kuis adek lo, langsung bypass dan render kuisnya!
     if (slug === "simulasi-time-attack-osnk-informatika") {
         return (
             <div className="min-h-screen bg-[#050505] text-white pt-32 pb-20 px-6">
@@ -93,15 +93,15 @@ export default async function LearnDetailPage({ params, searchParams }: Props) {
         );
     }
 
-    // LOGIC LAMA: Jika bukan slug kuis, baca file MDX integrasi FE-BE seperti biasa
-    let post;
+    let moduleData;
     try {
-        post = getPostData(slug, lang);
+        // 4. UBAH DI SINI: Gunakan getLearnData
+        moduleData = getLearnData(slug, lang);
     } catch (e) {
         return notFound();
     }
 
-    const { meta, content } = post;
+    const { meta, content } = moduleData;
 
     return (
         <div className="min-h-screen bg-[#050505] text-white">
