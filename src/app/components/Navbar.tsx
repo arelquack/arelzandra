@@ -31,8 +31,8 @@ const Navbar: React.FC = () => {
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-300 items-center">
-                    <a href="#home" className="hover:text-blue-400 hover:scale-105 transition-all">Home</a>
-                    <a href="#skills" className="hover:text-blue-400 hover:scale-105 transition-all">Skills</a>
+                    <a href="/#home" className="hover:text-blue-400 hover:scale-105 transition-all">Home</a>
+                    <a href="/#skills" className="hover:text-blue-400 hover:scale-105 transition-all">Skills</a>
                     <a href="/blog" className="hover:text-blue-400 hover:scale-105 transition-all">Blog</a>
                     <a href="/learn" className="hover:text-blue-400 hover:scale-105 transition-all">Learn</a>
                     
@@ -59,8 +59,8 @@ const Navbar: React.FC = () => {
             {/* Mobile Dropdown Menu (Card Style) */}
             {menuOpen && (
                 <div className="absolute top-20 left-4 right-4 glass-nav rounded-2xl p-6 flex flex-col space-y-4 md:hidden animate-in fade-in slide-in-from-top-5 shadow-2xl border border-white/10">
-                    <a href="#home" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Home</a>
-                    <a href="#skills" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Skills</a>
+                    <a href="/#home" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Home</a>
+                    <a href="/#skills" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Skills</a>
                     <a href="/blog" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Blog</a>
                     <a href="/learn" className="text-white hover:text-blue-400 text-lg font-medium p-2" onClick={() => setMenuOpen(false)}>Learn</a>
                     <hr className="border-gray-700"/>

@@ -183,21 +183,25 @@ const Projects: React.FC = () => {
                                     ))}
                                 </div>
 
-                                <div className="flex gap-4 mt-auto pt-4 border-t border-white/5">
+                                <div className="flex flex-wrap items-center gap-4 mt-auto pt-4 border-t border-white/5">
                                     {project.links.demo ? (
                                         <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-blue-400 hover:text-blue-300 transition">
                                             <FaExternalLinkAlt /> Live Demo
                                         </a>
                                     ) : (
-                                        <span className="flex items-center gap-2 text-sm font-bold text-gray-600 cursor-not-allowed">
-                                            <FaExternalLinkAlt /> Offline / Private
+                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white/5 text-gray-400 border border-white/10 select-none">
+                                            Private Project
                                         </span>
                                     )}
                                     
-                                    {project.links.repo && (
-                                            <a href={project.links.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition">
-                                                <FaGithub size={16} /> Code
-                                            </a>
+                                    {project.links.repo ? (
+                                        <a href={project.links.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition">
+                                            <FaGithub size={16} /> Code
+                                        </a>
+                                    ) : (
+                                        <span className="text-xs text-gray-500 font-medium border-l border-white/10 pl-3">
+                                            Private Repository
+                                        </span>
                                     )}
                                 </div>
                             </div>

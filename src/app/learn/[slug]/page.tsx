@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import { notFound } from 'next/navigation';
 import OsnkQuizPage from '@/app/components/learn/OsnkQuizPage';
+import DataEngineeringSimPage from '@/app/components/learn/DataEngineeringSimPage';
+import LatihanAsetQuizPage from '@/app/components/learn/LatihanAsetQuizPage';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -25,6 +27,7 @@ export async function generateStaticParams() {
     // Daftarkan slug kuis adek lo untuk semua bahasa
     for (const lang of languages) {
         allParams.push({ slug: "simulasi-time-attack-osnk-informatika" });
+        allParams.push({ slug: "simulasi-pipeline-data-engineering" });
     }
 
     // Daftarkan juga seluruh slug dari file MDX learn lo yang sudah ada
@@ -58,6 +61,13 @@ export async function generateMetadata({ params, searchParams }: Props) {
         };
     }
 
+    if (slug === "simulasi-pipeline-data-engineering") {
+        return {
+            title: "Simulasi ETL Pipeline Data Engineering | Arel Zandra",
+            description: "Pecahkan tantangan interaktif pemrosesan data (ETL) telekomunikasi menggunakan Pandas, PostgreSQL, SQL, dan Airflow.",
+        };
+    }
+
     try {
         // 3. UBAH DI SINI: Gunakan getLearnData
         const module = getLearnData(slug, lang);
@@ -87,6 +97,22 @@ export default async function LearnDetailPage({ params, searchParams }: Props) {
                         {lang === 'ja' ? '戻る' : lang === 'en' ? 'Back to Learn' : 'Kembali'}
                     </Link>
                     <OsnkQuizPage />
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (slug === "simulasi-pipeline-data-engineering") {
+        return (
+            <div className="min-h-screen bg-[#050505] text-white pt-32 pb-20 px-6">
+                <Navbar />
+                <main className="container mx-auto max-w-6xl">
+                    <Link href={`/learn?lang=${lang}`} className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
+                        <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" /> 
+                        {lang === 'ja' ? '戻る' : lang === 'en' ? 'Back to Learn' : 'Kembali'}
+                    </Link>
+                    <DataEngineeringSimPage />
                 </main>
                 <Footer />
             </div>
@@ -131,7 +157,18 @@ export default async function LearnDetailPage({ params, searchParams }: Props) {
                 </header>
                 
                 <article className="prose prose-invert prose-lg max-w-none">
-                    <ReactMarkdown>{content}</ReactMarkdown>
+                    <ReactMarkdown
+                        components={{
+                            latihanasetquizpage: () => <LatihanAsetQuizPage />,
+                            LatihanAsetQuizPage: () => <LatihanAsetQuizPage />,
+                            osnkquizpage: () => <OsnkQuizPage />,
+                            OsnkQuizPage: () => <OsnkQuizPage />,
+                            dataengineeringsimpage: () => <DataEngineeringSimPage />,
+                            DataEngineeringSimPage: () => <DataEngineeringSimPage />,
+                        } as any}
+                    >
+                        {content}
+                    </ReactMarkdown>
                 </article>
             </main>
 

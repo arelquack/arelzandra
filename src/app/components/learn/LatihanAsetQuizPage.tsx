@@ -144,7 +144,7 @@ export default function LatihanAsetQuizPage() {
 
   return (
     // Tambahkan not-prose dan manipulasi width agar kuis melebar melampaui batas artikel
-    <div className="not-prose w-[90vw] max-w-6xl relative left-1/2 -translate-x-1/2 bg-[#050505] text-white p-6 font-sans flex flex-col md:flex-row gap-8 rounded-2xl border border-white/10 my-12 shadow-[0_0_40px_rgba(37,99,235,0.15)]">
+    <div className="not-prose w-full max-w-6xl mx-auto bg-[#050505] text-white p-6 font-sans flex flex-col md:flex-row gap-8 rounded-2xl border border-white/10 my-12 shadow-[0_0_40px_rgba(37,99,235,0.15)]">
       
       {/* KIRI: PANEL KUIS */}
       <div className="w-full md:w-[35%] flex flex-col gap-6">

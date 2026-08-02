@@ -16,15 +16,6 @@ const Contact: React.FC = () => {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const handleSayHello = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        // Mencegah perilaku default agar tidak langsung menimpa tab saat ini
-        e.preventDefault();
-        
-        // Membuka mailto di window baru yang tidak terlihat/popup singkat
-        // Ini memastikan tab utama portofolio tetap aktif dan tidak ter-refresh
-        window.open(mailtoUrl, '_blank', 'noreferrer');
-    };
-
     return (
         <section id="contact" className="py-24 relative z-10 overflow-hidden">
             <div className="container mx-auto px-6">
@@ -50,10 +41,9 @@ const Contact: React.FC = () => {
                     </p>
 
                     <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-12">
-                        {/* Send Email Button dengan handleSayHello */}
+                        {/* Send Email Button */}
                         <a 
                             href={mailtoUrl}
-                            onClick={handleSayHello}
                             className="btn-primary px-8 py-4 rounded-full text-lg font-bold flex items-center gap-3 hover:scale-105 transition-transform shadow-lg shadow-blue-500/20"
                         >
                             <FaEnvelope /> Say Hello
