@@ -77,7 +77,7 @@ const Contact: React.FC = () => {
                     </div>
 
                     <div className="flex justify-center gap-8">
-                        <a href="https://www.linkedin.com/in/farrel-zandra-75007034a" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-all hover:scale-110">
+                        <a href="https://www.linkedin.com/in/farrel-zandra" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-all hover:scale-110">
                             <FaLinkedin size={32} title="LinkedIn" />
                         </a>
                         <a href="https://github.com/arelquack" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-all hover:scale-110">

@@ -1,6 +1,5 @@
 // src/app/learn/[slug]/page.tsx
 
-// 1. UBAH IMPORT DI SINI: Gunakan getLearnData dan getSortedLearnData
 import { getLearnData, getSortedLearnData } from '@/lib/mdx'; 
 import ReactMarkdown from 'react-markdown';
 import Navbar from '@/app/components/Navbar';
@@ -33,7 +32,6 @@ export async function generateStaticParams() {
     // Daftarkan juga seluruh slug dari file MDX learn lo yang sudah ada
     for (const lang of languages) {
         try {
-            // 2. UBAH DI SINI: Gunakan getSortedLearnData
             const learnModules = getSortedLearnData(lang); 
             const params = learnModules.map((module) => ({
                 slug: module.slug,
@@ -69,7 +67,6 @@ export async function generateMetadata({ params, searchParams }: Props) {
     }
 
     try {
-        // 3. UBAH DI SINI: Gunakan getLearnData
         const module = getLearnData(slug, lang);
         return {
             title: `${module.meta.title} | Arel Zandra`,
@@ -78,6 +75,32 @@ export async function generateMetadata({ params, searchParams }: Props) {
     } catch {
         return { title: 'Material Not Found | Arel Zandra' };
     }
+}
+
+/**
+ * Helper renderer untuk merender tag JSX custom seperti <LatihanAsetQuizPage /> di dalam MDX
+ */
+function renderContentWithComponents(content: string) {
+    const parts = content.split(/(<LatihanAsetQuizPage\s*\/?>|<OsnkQuizPage\s*\/?>|<DataEngineeringSimPage\s*\/?>)/gi);
+
+    return parts.map((part, index) => {
+        const trimmed = part.trim().toLowerCase();
+        if (trimmed === '<latihanasetquizpage />' || trimmed === '<latihanasetquizpage/>') {
+            return <LatihanAsetQuizPage key={index} />;
+        }
+        if (trimmed === '<osnkquizpage />' || trimmed === '<osnkquizpage/>') {
+            return <OsnkQuizPage key={index} />;
+        }
+        if (trimmed === '<dataengineeringsimpage />' || trimmed === '<dataengineeringsimpage/>') {
+            return <DataEngineeringSimPage key={index} />;
+        }
+        if (!part.trim()) return null;
+        return (
+            <ReactMarkdown key={index}>
+                {part}
+            </ReactMarkdown>
+        );
+    });
 }
 
 /**
@@ -121,19 +144,19 @@ export default async function LearnDetailPage({ params, searchParams }: Props) {
 
     let moduleData;
     try {
-        // 4. UBAH DI SINI: Gunakan getLearnData
         moduleData = getLearnData(slug, lang);
     } catch (e) {
         return notFound();
     }
 
     const { meta, content } = moduleData;
+    const hasInteractiveQuiz = content.toLowerCase().includes("latihanasetquizpage") || content.toLowerCase().includes("dataengineeringsimpage");
 
     return (
         <div className="min-h-screen bg-[#050505] text-white">
             <Navbar />
 
-            <main className="container mx-auto px-6 pt-32 pb-20 max-w-3xl">
+            <main className={`container mx-auto px-6 pt-32 pb-20 ${hasInteractiveQuiz ? 'max-w-5xl' : 'max-w-3xl'}`}>
                 <Link href={`/learn?lang=${lang}`} className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
                     <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" /> 
                     Back to Learn
@@ -157,18 +180,7 @@ export default async function LearnDetailPage({ params, searchParams }: Props) {
                 </header>
                 
                 <article className="prose prose-invert prose-lg max-w-none">
-                    <ReactMarkdown
-                        components={{
-                            latihanasetquizpage: () => <LatihanAsetQuizPage />,
-                            LatihanAsetQuizPage: () => <LatihanAsetQuizPage />,
-                            osnkquizpage: () => <OsnkQuizPage />,
-                            OsnkQuizPage: () => <OsnkQuizPage />,
-                            dataengineeringsimpage: () => <DataEngineeringSimPage />,
-                            DataEngineeringSimPage: () => <DataEngineeringSimPage />,
-                        } as any}
-                    >
-                        {content}
-                    </ReactMarkdown>
+                    {renderContentWithComponents(content)}
                 </article>
             </main>
 

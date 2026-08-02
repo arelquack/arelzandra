@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FaGithub, FaInstagram, FaLinkedin, FaFacebook, FaArrowUp } from "react-icons/fa";
+import { FaGithub, FaInstagram, FaLinkedin, FaArrowUp } from "react-icons/fa";
 
 const Footer: React.FC = () => {
     
@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
                             <FaGithub size={20} />
                         </a>
                         <a 
-                            href="http://www.linkedin.com/in/farrel-zandra-75007034a" 
+                            href="https://www.linkedin.com/in/farrel-zandra" 
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="p-3 bg-white/5 rounded-full text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 hover:scale-110 transition-all border border-white/5"
@@ -55,14 +55,6 @@ const Footer: React.FC = () => {
                             className="p-3 bg-white/5 rounded-full text-gray-400 hover:text-pink-500 hover:bg-pink-500/10 hover:scale-110 transition-all border border-white/5"
                         >
                             <FaInstagram size={20} />
-                        </a>
-                        <a 
-                            href="https://facebook.com/arrelalvarro" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="p-3 bg-white/5 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-600/10 hover:scale-110 transition-all border border-white/5"
-                        >
-                            <FaFacebook size={20} />
                         </a>
                     </div>
                 </div>
