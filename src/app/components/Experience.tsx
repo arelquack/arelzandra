@@ -103,7 +103,7 @@ const Experience: React.FC = () => {
               </div>
 
               {/* Glassmorphism Card */}
-              <div className="glass-card rounded-2xl p-6 md:p-8 transition-all duration-300 group-hover:border-blue-500/40 relative overflow-hidden">
+              <div className="glass-card shimmer-container rounded-2xl p-6 md:p-8 transition-all duration-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] relative overflow-hidden">
                 
                 {/* Header Meta */}
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">

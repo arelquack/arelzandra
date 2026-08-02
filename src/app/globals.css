@@ -3,93 +3,200 @@
 @tailwind utilities;
 
 :root {
-  /* Warna background lebih pekat (Deep Black) untuk kesan modern */
   --background: #050505;
   --foreground: #ededed;
-  
-  /* Aksen warna utama (bisa diubah sesuai selera) */
-  --primary-glow: rgba(59, 130, 246, 0.6); /* Biru */
-  --secondary-glow: rgba(6, 182, 212, 0.6); /* Cyan */
+  --primary-glow: rgba(59, 130, 246, 0.6);
+  --secondary-glow: rgba(6, 182, 212, 0.6);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  /* Font Geist sudah di-handle di layout.tsx, jadi aman */
-  overflow-x: hidden; /* Mencegah scroll samping tak sengaja */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* --- Modern Utilities (Glassmorphism & Glow) --- */
 
-/* Efek Kaca untuk Navbar */
 .glass-nav {
-  background: rgba(5, 5, 5, 0.7); /* Gelap transparan */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(5, 5, 5, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Efek Kaca untuk Card (Project & Skills) */
 .glass-card {
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow, border-color;
 }
 
-/* Hover effect untuk Glass Card */
 .glass-card:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(59, 130, 246, 0.3); /* Border biru tipis saat hover */
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15); /* Soft blue glow */
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-7px) scale(1.01);
+  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.25), 0 0 20px rgba(59, 130, 246, 0.15);
 }
 
-/* Teks Gradient yang menyala */
+/* Glowing Animated Gradient Text */
 .text-glow-gradient {
-  background: linear-gradient(to right, #60a5fa, #22d3ee);
+  background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 50%, #a855f7 100%);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3));
+  animation: gradient-flow 6s ease infinite;
+  filter: drop-shadow(0 0 25px rgba(96, 165, 250, 0.35));
 }
 
-/* Tombol dengan efek glow halus */
 .btn-primary {
-  background: linear-gradient(to right, #2563eb, #06b6d4);
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  background-size: 200% 200%;
   color: white;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
+  animation: gradient-flow 6s ease infinite;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
-  transform: scale(1.02);
+  box-shadow: 0 0 35px rgba(37, 99, 235, 0.7), 0 0 15px rgba(6, 182, 212, 0.5);
+  transform: translateY(-2px) scale(1.03);
 }
 
-/* --- Scrollbar Keren (Opsional) --- */
+/* --- KEYFRAME ANIMATIONS --- */
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(12px) rotate(-1deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation Helper Classes */
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 7s ease-in-out 1s infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Shimmer Light Sweep Effect for Buttons & Cards */
+.shimmer-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.8s ease;
+}
+
+.shimmer-container:hover::after {
+  animation: shine-sweep 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  border: 2px solid #050505;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgba(59, 130, 246, 0.5);
 }
 
-/* --- Background Starfield Fix --- */
+/* Three.js Background Canvas */
 #threejs-bg {
   position: fixed;
   top: 0;

@@ -155,7 +155,7 @@ const Projects: React.FC = () => {
           {projects.map((project) => (
             <div 
               key={project.id} 
-              className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group hover:border-blue-500/50 transition-all duration-300 shadow-xl relative"
+              className="glass-card shimmer-container rounded-2xl overflow-hidden flex flex-col h-full group hover:border-blue-500/60 transition-all duration-500 shadow-xl relative"
             >
               
               {/* Image Banner */}

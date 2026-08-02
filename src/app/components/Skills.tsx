@@ -137,17 +137,17 @@ const Skills: React.FC = () => {
           {filteredSkills.map((skill, index) => (
             <div 
               key={index} 
-              className="glass-card p-5 rounded-2xl flex flex-col items-center justify-between gap-3 group cursor-default transition-all duration-300 hover:-translate-y-1.5 border border-white/5 hover:border-white/20 relative overflow-hidden"
+              className="glass-card shimmer-container p-5 rounded-2xl flex flex-col items-center justify-between gap-3 group cursor-default transition-all duration-400 hover:-translate-y-2 border border-white/5 hover:border-white/20 relative overflow-hidden shadow-lg"
             >
               {/* Glow Accent on Hover */}
               <div 
-                className="absolute inset-0 blur-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none"
                 style={{ backgroundColor: skill.color }}
               />
 
               {/* Icon Container */}
-              <div className="p-3.5 rounded-2xl bg-white/5 group-hover:bg-white/10 transition-colors relative">
-                <skill.icon size={36} color={skill.color} className="relative z-10 drop-shadow-md" />
+              <div className="p-3.5 rounded-2xl bg-white/5 group-hover:bg-white/10 transition-all duration-300 relative group-hover:scale-110">
+                <skill.icon size={36} color={skill.color} className="relative z-10 drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]" />
               </div>
 
               {/* Name & Badge */}
