@@ -124,11 +124,12 @@ const projects: Project[] = [
     date: "Jan 2025",
     image: "/images/website-nk.png",
     description: "A comprehensive web-based information system and admin dashboard with custom SEO optimization yielding top organic search rankings.",
-    stack: ["Next.js", "TypeScript", "Supabase", "Vercel"],
+    stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Supabase", "Cloudinary", "GSAP", "TipTap"],
     links: {
       demo: "https://nk-project.vercel.app",
       repo: null
-    }
+    },
+    hasCaseStudy: true
   }
 ];
 
