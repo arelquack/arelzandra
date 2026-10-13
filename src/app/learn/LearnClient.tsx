@@ -7,8 +7,8 @@ import {
   FaSortAmountDown,
   FaSortAmountUp,
   FaTimes,
+  FaArrowRight,
 } from "react-icons/fa";
-import { Code2 } from "lucide-react";
 
 interface LearnModule {
   slug: string;
@@ -23,11 +23,16 @@ interface LearnClientProps {
   modulesId: LearnModule[];
   modulesEn: LearnModule[];
   modulesJa: LearnModule[];
-  initialLang: 'id' | 'en' | 'ja';
+  initialLang: "id" | "en" | "ja";
 }
 
-export default function LearnClient({ modulesId, modulesEn, modulesJa, initialLang }: LearnClientProps) {
-  const [lang, setLang] = useState<'id' | 'en' | 'ja'>(initialLang);
+export default function LearnClient({
+  modulesId,
+  modulesEn,
+  modulesJa,
+  initialLang,
+}: LearnClientProps) {
+  const [lang, setLang] = useState<"id" | "en" | "ja">(initialLang);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("All");
   const [sortOrder, setSortOrder] = useState("newest");
@@ -36,19 +41,27 @@ export default function LearnClient({ modulesId, modulesEn, modulesJa, initialLa
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return dateString;
 
-    if (currentLang === 'ja') {
-      return date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (currentLang === "ja") {
+      return date.toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
     }
-    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   const allModules = useMemo(() => {
-    if (lang === 'en') return modulesEn;
-    if (lang === 'ja') return modulesJa;
+    if (lang === "en") return modulesEn;
+    if (lang === "ja") return modulesJa;
     return modulesId;
   }, [lang, modulesId, modulesEn, modulesJa]);
 
-  const handleLangChange = (newLang: 'id' | 'en' | 'ja') => {
+  const handleLangChange = (newLang: "id" | "en" | "ja") => {
     setLang(newLang);
     setSelectedTag("All");
   };
@@ -62,14 +75,16 @@ export default function LearnClient({ modulesId, modulesEn, modulesJa, initialLa
   }, [allModules]);
 
   const filteredModules = useMemo(() => {
-    let results = allModules.filter((mod) => {
+    const results = allModules.filter((mod) => {
       const title = mod.title?.toLowerCase() || "";
       const description = mod.description?.toLowerCase() || "";
       const search = searchQuery.toLowerCase();
 
-      const matchesSearch = title.includes(search) || description.includes(search);
-      const matchesTag = selectedTag === "All" || (mod.tags?.includes(selectedTag) ?? false);
-      
+      const matchesSearch =
+        title.includes(search) || description.includes(search);
+      const matchesTag =
+        selectedTag === "All" || (mod.tags?.includes(selectedTag) ?? false);
+
       return matchesSearch && matchesTag;
     });
 
@@ -81,37 +96,48 @@ export default function LearnClient({ modulesId, modulesEn, modulesJa, initialLa
   }, [allModules, searchQuery, selectedTag, sortOrder]);
 
   return (
-    <>
-      {/* Header Dinamis */}
-      <div className="mb-12 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight flex flex-col md:flex-row items-center gap-3">
-          <Code2 className="w-10 h-10 text-blue-500" />
-          <span>Interactive <span className="text-glow-gradient">Learn</span></span>
+    <div>
+      {/* Editorial Header */}
+      <div className="mb-14">
+        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary mb-4">
+          <span>INTERACTIVE LEARN</span>
+          <span className="inline-block w-8 h-px bg-ink-muted" />
+          <span className="text-ink-primary">→</span>
+        </div>
+
+        <h1 className="font-serif uppercase text-5xl sm:text-6xl md:text-7xl text-ink-primary tracking-tight leading-[0.95] mb-4">
+          {lang === "ja"
+            ? "インタラクティブ 学習"
+            : lang === "en"
+            ? "Interactive Learn"
+            : "Modul Belajar Interaktif"}
         </h1>
-        <p className="text-gray-400 text-lg">
-          {lang === 'ja' 
-            ? '技術を磨くためのインタラクティブな学習モジュール。' 
-            : lang === 'en' 
-            ? 'Interactive challenges and materials to level up your skills.' 
-            : 'Materi dan tantangan interaktif untuk mengasah skill teknis kamu.'}
+
+        <p className="text-ink-secondary text-base sm:text-lg max-w-2xl">
+          {lang === "ja"
+            ? "技術を磨くためのインタラクティブな学習モジュール。"
+            : lang === "en"
+            ? "Interactive engineering simulations, competitive programming quizzes, and hands-on materials."
+            : "Simulasi rekayasa interaktif, kuis pemrograman kompetitif, dan materi belajar langsung."}
         </p>
       </div>
 
-      {/* Language & Sort Toolbar */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div className="bg-white/5 border border-gray-800 p-1 rounded-xl flex gap-1">
+      {/* Language, Search & Sort Controls */}
+      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 pb-6 border-b border-line mb-6">
+        <div className="flex items-center gap-6 text-xs uppercase tracking-[0.16em]">
           {[
-            { code: 'id', label: 'ID' },
-            { code: 'en', label: 'EN' },
-            { code: 'ja', label: 'JP' }
+            { code: "id", label: "ID" },
+            { code: "en", label: "EN" },
+            { code: "ja", label: "JP" },
           ].map((l) => (
             <button
               key={l.code}
-              onClick={() => handleLangChange(l.code as any)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                lang === l.code 
-                ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" 
-                : "text-gray-500 hover:text-white"
+              type="button"
+              onClick={() => handleLangChange(l.code as "id" | "en" | "ja")}
+              className={`py-2 transition-colors relative ${
+                lang === l.code
+                  ? "text-ink-primary font-bold after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.5 after:bg-ink-primary"
+                  : "text-ink-secondary hover:text-ink-primary"
               }`}
             >
               {l.label}
@@ -119,90 +145,125 @@ export default function LearnClient({ modulesId, modulesEn, modulesJa, initialLa
           ))}
         </div>
 
-        <button
-          onClick={() => setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors bg-white/5 border border-gray-800 px-4 py-2 rounded-lg"
-        >
-          {sortOrder === "newest" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-          {lang === 'ja' ? (sortOrder === "newest" ? "最新順" : "古い順") 
-            : lang === 'en' ? (sortOrder === "newest" ? "Latest" : "Oldest") 
-            : (sortOrder === "newest" ? "Terbaru" : "Terlama")}
-        </button>
-      </div>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative w-full sm:w-64">
+            <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-muted text-xs" />
+            <input
+              type="text"
+              placeholder={
+                lang === "ja"
+                  ? "モジュールを検索..."
+                  : lang === "en"
+                  ? "Search modules..."
+                  : "Cari materi belajar..."
+              }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full min-h-[40px] bg-surface border border-line rounded-xl py-2 pl-9 pr-8 text-xs sm:text-sm text-ink-primary placeholder-ink-muted focus:outline-none focus:border-ink-primary transition-colors"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-primary"
+              >
+                <FaTimes size={11} />
+              </button>
+            )}
+          </div>
 
-      {/* Search Bar */}
-      <div className="relative group mb-8">
-        <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
-        <input
-          type="text"
-          placeholder={lang === 'ja' ? "モジュールを検索..." : lang === 'en' ? "Search modules..." : "Cari materi belajar..."}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-white/5 border border-gray-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-blue-500/50 transition-all text-gray-200"
-        />
-        {searchQuery && (
-          <button onClick={() => setSearchQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
-            <FaTimes />
+          <button
+            type="button"
+            onClick={() =>
+              setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))
+            }
+            className="min-h-[40px] inline-flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink-secondary hover:text-ink-primary transition-colors bg-surface border border-line px-4 py-2 rounded-xl"
+          >
+            {sortOrder === "newest" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            {lang === "ja"
+              ? sortOrder === "newest"
+                ? "最新順"
+                : "古い順"
+              : lang === "en"
+              ? sortOrder === "newest"
+                ? "Latest"
+                : "Oldest"
+              : sortOrder === "newest"
+              ? "Terbaru"
+              : "Terlama"}
           </button>
-        )}
+        </div>
       </div>
 
-      {/* Tag Filters */}
-      <div className="flex flex-wrap gap-2 mb-12">
+      {/* Minimal Tag Filter Bar */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-12 text-xs">
         {allTags.map((tag) => (
           <button
             key={tag}
+            type="button"
             onClick={() => setSelectedTag(tag)}
-            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all border ${
+            className={`py-1 transition-colors ${
               selectedTag === tag
-                ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
-                : "bg-white/5 border-gray-800 text-gray-400 hover:border-gray-600"
+                ? "text-ink-primary font-bold underline underline-offset-4"
+                : "text-ink-muted hover:text-ink-primary"
             }`}
           >
-            {tag === "All" ? (lang === 'ja' ? "すべて" : tag) : `#${tag}`}
+            {tag === "All"
+              ? lang === "ja"
+                ? "すべて (All)"
+                : "All Topics"
+              : `#${tag}`}
           </button>
         ))}
       </div>
 
-      {/* Grid Modules */}
+      {/* Editorial Grid Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredModules.length > 0 ? (
-          filteredModules.map((mod) => (
+          filteredModules.map((mod, idx) => (
             <Link key={mod.slug} href={`/learn/${mod.slug}?lang=${lang}`}>
-              <article className="bg-white/5 border border-gray-800 p-6 md:p-8 rounded-2xl hover:border-blue-500/50 hover:bg-white/10 transition-all group relative overflow-hidden h-full flex flex-col">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-4">
-                  <h2 className="text-xl font-bold group-hover:text-blue-400 transition-colors leading-tight">
-                    {mod.title}
-                  </h2>
-                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-blue-400 border border-blue-500/30 px-3 py-1 rounded-full w-fit bg-blue-500/10">
-                    {mod.level || 'Beginner'}
-                  </span>
-                </div>
-                <p className="text-gray-400 leading-relaxed mb-6 text-sm flex-grow">
-                  {mod.description}
-                </p>
-                
-                <div className="flex justify-between items-end mt-auto pt-4 border-t border-gray-800/50">
-                    <div className="flex flex-wrap gap-2">
-                    {mod.tags?.map((tag) => (
-                        <span key={tag} className="text-xs font-medium text-gray-500 bg-white/5 border border-gray-800 px-2 py-1 rounded">
-                        #{tag}
-                        </span>
-                    ))}
-                    </div>
-                    <span className="text-xs text-gray-500">
-                        {formatDate(mod.date, lang)}
+              <article className="bg-surface border border-line p-6 sm:p-8 rounded-[24px] hover:border-ink-primary transition-all group h-full flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between gap-3 text-xs font-mono text-ink-muted mb-3">
+                    <span>
+                      0{idx + 1} — {(mod.level || "Beginner").toUpperCase()}
                     </span>
+                    <span>{formatDate(mod.date, lang)}</span>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <h2 className="text-xl font-semibold text-ink-primary group-hover:opacity-75 transition-opacity leading-snug tracking-tight">
+                      {mod.title}
+                    </h2>
+                    <FaArrowRight
+                      size={12}
+                      className="text-ink-muted group-hover:text-ink-primary group-hover:translate-x-1 transition-all shrink-0 mt-1.5"
+                    />
+                  </div>
+
+                  <p className="text-ink-secondary leading-relaxed text-sm mb-6">
+                    {mod.description}
+                  </p>
                 </div>
+
+                {mod.tags && mod.tags.length > 0 && (
+                  <div className="pt-4 border-t border-line text-xs font-mono text-ink-muted">
+                    {mod.tags.map((t) => `#${t}`).join(" · ")}
+                  </div>
+                )}
               </article>
             </Link>
           ))
         ) : (
-          <div className="md:col-span-2 text-center py-20 bg-white/5 border border-dashed border-gray-800 rounded-2xl text-gray-500">
-            {lang === 'ja' ? "モジュールが見つかりませんでした。" : lang === 'en' ? "No modules found." : "Materi tidak ditemukan."}
+          <div className="md:col-span-2 text-center py-16 text-ink-secondary text-sm">
+            {lang === "ja"
+              ? "モジュールが見つかりませんでした。"
+              : lang === "en"
+              ? "No modules found."
+              : "Materi tidak ditemukan."}
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

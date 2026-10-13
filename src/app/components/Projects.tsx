@@ -1,275 +1,231 @@
 "use client";
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { 
-  FaGithub, FaExternalLinkAlt, FaLinkedin, FaCalendarAlt, FaBookOpen
-} from 'react-icons/fa';
-
-export interface Project {
-  id: string;
-  title: string;
-  date: string;
-  image: string;
-  description: string;
-  stack: string[];
-  partners?: {
-    name: string;
-    linkedin: string;
-  }[];
-  links: {
-    demo: string | null;
-    repo: string | null;
-  };
-  hasCaseStudy?: boolean;
-}
-
-const projects: Project[] = [
-  {
-    id: "nexus",
-    title: "Nexus",
-    date: "Jun 2026",
-    image: "/images/nexus-v2.png",
-    description: "A modern all-in-one cybernetic personal ecosystem integrating academics, 2D force graph networking, financial ledgers, health telemetry, and a gamified XP leveling engine.",
-    stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Supabase PostgreSQL", "HTML5 Canvas", "PWA"],
-    links: {
-      demo: null,
-      repo: null
-    },
-    hasCaseStudy: true
-  },
-  {
-    id: "votex",
-    title: "VoteX",
-    date: "May 2026",
-    image: "/images/votex.png",
-    description: "A Decentralized Autonomous Organization (DAO) application for transparent, secure, and immutable digital voting leveraging Ethereum.",
-    stack: ["Solidity", "Ethereum", "Next.js", "Web3"],
-    partners: [
-      {
-        name: "Zidan Taufiqurahman",
-        linkedin: "https://www.linkedin.com/in/zidan-taufiqurahman-0208ba385/"
-      }
-    ],
-    links: {
-      demo: null, 
-      repo: null
-    }
-  },
-  {
-    id: "newlymom",
-    title: "Newlymom",
-    date: "May 2026",
-    image: "/images/newlymom.png",
-    description: "An integrated multi-platform system for postpartum mental health support, featuring early detection alerts and sentiment analysis.",
-    stack: ["Flutter", "Spring Boot", "Next.js", "Java"],
-    partners: [
-      {
-        name: "Reqi Jumantara Hapid",
-        linkedin: "https://www.linkedin.com/in/reqi-jumantara"
-      },
-      {
-        name: "Umar Faruq Robbany",
-        linkedin: "https://www.linkedin.com/in/umar-faruq-robbany/"
-      }
-    ],
-    links: {
-      demo: null,
-      repo: null
-    }
-  },
-  {
-    id: "adkeskom",
-    title: "AdkesKom",
-    date: "Jan 2026",
-    image: "/images/adkeskom.png",
-    description: "Web application incorporating gamification elements to track member engagement and integrate cross-stack API endpoints.",
-    stack: ["Next.js", "FastAPI", "Supabase", "Python"],
-    partners: [
-      {
-        name: "Annisa Dian Fadillah",
-        linkedin: "https://www.linkedin.com/in/annisadianfadillah"
-      }
-    ],
-    links: {
-      demo: "https://adkes-himakom.vercel.app",
-      repo: null
-    }
-  },
-  {
-    id: "rekamedchain",
-    title: "RekamedChain",
-    date: "Oct 2025",
-    image: "/images/rekamedchain.png",
-    description: "MVP of an e-government digital medical record system securing patient data sovereignty through Self-Sovereign Identity (SSI) and IPFS.",
-    stack: ["Golang", "Docker", "IPFS", "CI/CD"],
-    partners: [
-      {
-        name: "Reqi Jumantara Hapid",
-        linkedin: "https://www.linkedin.com/in/reqi-jumantara"
-      },
-      {
-        name: "Umar Faruq Robbany",
-        linkedin: "https://www.linkedin.com/in/umar-faruq-robbany/"
-      }
-    ],
-    links: {
-      demo: null,
-      repo: null
-    }
-  },
-  {
-    id: "website-nk",
-    title: "Nihongo Kurabu Portal",
-    date: "Jan 2025",
-    image: "/images/website-nk.png",
-    description: "A comprehensive web-based information system and admin dashboard with custom SEO optimization yielding top organic search rankings.",
-    stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Supabase", "Cloudinary", "GSAP", "TipTap"],
-    links: {
-      demo: "https://nk-project.vercel.app",
-      repo: null
-    },
-    hasCaseStudy: true
-  }
-];
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FaLinkedin,
+  FaBookOpen,
+  FaArrowUpRightFromSquare,
+  FaChevronDown,
+  FaChevronUp,
+  FaArrowRight,
+} from "react-icons/fa6";
+import { projectsData } from "@/lib/projectsData";
+import TechStackIcons from "@/app/components/TechStackIcons";
 
 const Projects: React.FC = () => {
-  return (
-    <section id="projects" className="py-24 relative z-10 overflow-hidden">
-      {/* Soft Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none -z-10" />
+  const [expandedHighlights, setExpandedHighlights] = useState<
+    Record<string, boolean>
+  >({});
 
-      <div className="container mx-auto px-6 max-w-6xl">
-        
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white tracking-tight">
-            Featured <span className="text-glow-gradient">Projects & Case Studies</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Architecting complex applications from self-hosted personal operating systems to decentralized blockchain DAO networks.
-          </p>
+  const featuredProjects = projectsData.filter((p) => p.featured);
+
+  const toggleProjectHighlights = (id: string) => {
+    setExpandedHighlights((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  return (
+    <section id="projects" className="py-16 sm:py-24 px-5 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Editorial Asymmetric Header */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 items-start mb-12 sm:mb-20">
+          <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
+            <span>SELECTED WORK</span>
+            <span className="inline-block w-8 h-px bg-ink-muted" />
+            <span className="text-ink-primary">→</span>
+          </div>
+
+          <div className="md:col-span-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-normal tracking-tight text-ink-primary leading-[1.38] sm:leading-[1.3] max-w-2xl">
+              Featured{" "}
+              <span className="text-ink-muted">Projects &amp; Case Studies</span>{" "}
+              — Architecting production platforms from{" "}
+              <span className="text-ink-muted">
+                autonomous enterprise BI agents &amp; monorepo PWAs
+              </span>{" "}
+              to{" "}
+              <span className="text-ink-muted">
+                self-hosted personal operating systems
+              </span>
+              .
+            </h2>
+
+            <Link
+              href="/projects"
+              className="min-h-[40px] inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-primary hover:opacity-70 transition-opacity border-b border-ink-primary pb-1 shrink-0 self-start sm:self-auto"
+            >
+              View All {projectsData.length} Projects <FaArrowRight size={10} />
+            </Link>
+          </div>
         </div>
 
-        {/* Projects Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <div 
-              key={project.id} 
-              className="glass-card shimmer-container rounded-2xl overflow-hidden flex flex-col h-full group hover:border-blue-500/60 transition-all duration-500 shadow-xl relative"
-            >
-              
-              {/* Image Banner */}
-              <div className="relative h-52 overflow-hidden bg-neutral-900 group">
-                <Image 
-                  src={project.image} 
-                  alt={project.title} 
-                  width={800} 
-                  height={500}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 relative z-10"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent opacity-80 z-20" />
-              </div>
+        {/* Staggered Showcase Frames */}
+        <div className="space-y-12 sm:space-y-24">
+          {featuredProjects.map((project, idx) => {
+            const isEven = idx % 2 === 0;
+            const isExpanded = !!expandedHighlights[project.id];
 
-              {/* Card Body */}
-              <div className="p-6 md:p-7 flex flex-col flex-grow relative z-30 -mt-4">
-                
-                {/* Date Badge */}
-                <div className="mb-3">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold tracking-wider bg-white/5 text-gray-300 border border-white/10">
-                    <FaCalendarAlt className="text-gray-400" />
-                    {project.date}
-                  </span>
-                </div>
+            return (
+              <article
+                key={project.id}
+                className={`w-full lg:w-[82%] ${
+                  isEven ? "lg:ml-auto" : "lg:mr-auto"
+                } rounded-[24px] sm:rounded-[36px] bg-surface-muted p-4 sm:p-8 lg:p-12 border border-line/70 transition-all duration-300`}
+              >
+                {/* Clean Rounded Screenshot Frame (No Fake URL Bar Clutter) */}
+                <div className="rounded-xl sm:rounded-2xl bg-surface border border-line shadow-[0_12px_32px_rgba(20,20,22,0.06)] overflow-hidden group">
+                  <div className="relative w-full overflow-hidden bg-surface-muted">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={1920}
+                      height={920}
+                      sizes="(max-width: 1024px) 100vw, 920px"
+                      className="w-full h-auto block group-hover:scale-[1.015] transition-transform duration-700"
+                    />
 
-                {/* Title */}
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
-                  {project.title}
-                </h3>
-                
-                {/* Description */}
-                <p className="text-gray-400 text-xs md:text-sm mb-4 leading-relaxed line-clamp-3">
-                  {project.description}
-                </p>
-                
-                {/* Partners (if any) */}
-                {project.partners && project.partners.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-[11px] text-gray-500 font-medium mb-1">Co-developed with:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.partners.map((partner, pIdx) => (
-                        <a 
-                          key={pIdx}
-                          href={partner.linkedin}
+                    {/* Centered Circular VIEW Button ONLY for projects with a public Live Demo */}
+                    {project.links.demo && (
+                      <div className="hidden sm:flex absolute inset-0 bg-ink-primary/0 group-hover:bg-ink-primary/15 transition-colors items-center justify-center">
+                        <a
+                          href={project.links.demo}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-medium text-gray-400 hover:text-blue-400 transition-colors"
+                          className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-footer-bg/95 text-ink-inverse text-[11px] font-semibold uppercase tracking-[0.2em] flex items-center justify-center shadow-xl hover:scale-105 transition-transform"
                         >
-                          <FaLinkedin size={12} />
-                          {partner.name}
+                          View
                         </a>
-                      ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Clean Editorial Project Details Below Frame */}
+                <div className="mt-5 sm:mt-9 space-y-4 sm:space-y-5 px-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs font-mono uppercase tracking-[0.14em] text-ink-muted border-b border-line pb-3">
+                    <span>
+                      0{idx + 1} — {project.role || "Software Engineering"}
+                    </span>
+                    <span>{project.date}</span>
+                  </div>
+
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5 sm:gap-6">
+                    <div className="space-y-3 max-w-2xl">
+                      <div>
+                        <h3 className="text-xl sm:text-3xl font-semibold text-ink-primary tracking-tight">
+                          {project.title}
+                        </h3>
+                        {project.subtitle && (
+                          <p className="text-xs sm:text-sm font-medium text-ink-secondary mt-1 leading-snug">
+                            {project.subtitle}
+                          </p>
+                        )}
+                      </div>
+
+                      <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
+                        {project.description}
+                      </p>
+
+                      {/* Expandable "Read More" Technical Highlights */}
+                      {project.highlights && project.highlights.length > 0 && (
+                        <div className="pt-1 space-y-2.5">
+                          {isExpanded && (
+                            <ul className="space-y-2 text-xs sm:text-sm text-ink-secondary leading-relaxed list-disc pl-4 sm:pl-5">
+                              {project.highlights.map((h, hIdx) => (
+                                <li key={hIdx} className="pl-1">
+                                  {h}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => toggleProjectHighlights(project.id)}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-ink-primary hover:opacity-70 transition-opacity"
+                          >
+                            {isExpanded ? (
+                              <>
+                                <span>Show Less</span>
+                                <FaChevronUp size={10} />
+                              </>
+                            ) : (
+                              <>
+                                <span>
+                                  Read More ({project.highlights.length} Key
+                                  Highlights)
+                                </span>
+                                <FaChevronDown size={10} />
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
+
+                      {project.partners && project.partners.length > 0 && (
+                        <div className="pt-1 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-secondary">
+                          <span className="text-ink-muted">
+                            Co-developed with:
+                          </span>
+                          {project.partners.map((partner, pIdx) => (
+                            <a
+                              key={pIdx}
+                              href={partner.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 font-medium text-ink-primary hover:underline"
+                            >
+                              <FaLinkedin size={12} className="text-ink-muted" />
+                              {partner.name}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Tech Stack Icons with Hover Tooltips */}
+                      <TechStackIcons stack={project.stack} />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-5 shrink-0 pt-1">
+                      {project.hasCaseStudy && (
+                        <Link
+                          href={`/projects/${project.id}`}
+                          className="min-h-[44px] inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-primary hover:opacity-70 transition-opacity border-b border-ink-primary pb-1"
+                        >
+                          <FaBookOpen size={12} /> Read Case Study
+                        </Link>
+                      )}
+
+                      {project.links.demo && (
+                        <a
+                          href={project.links.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="min-h-[44px] inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-secondary hover:text-ink-primary transition-colors border-b border-line hover:border-ink-primary pb-1"
+                        >
+                          Live Demo <FaArrowUpRightFromSquare size={10} />
+                        </a>
+                      )}
                     </div>
                   </div>
-                )}
-
-                {/* Tech Stack Badges */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {project.stack.map((tech, i) => (
-                    <span 
-                      key={i} 
-                      className="text-[11px] font-medium text-gray-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded hover:bg-white/10 transition-colors cursor-default"
-                    >
-                      {tech}
-                    </span>
-                  ))}
                 </div>
-
-                {/* Footer Buttons */}
-                <div className="mt-auto pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
-                  
-                  {/* Case Study Link (Only if project has dedicated caseStudy page) */}
-                  {project.hasCaseStudy ? (
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/40 text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.4)] group"
-                    >
-                      <FaBookOpen className="text-white group-hover:scale-110 transition-transform" /> Read Case Study
-                    </Link>
-                  ) : project.links.demo ? (
-                    <a 
-                      href={project.links.demo} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-1.5"
-                    >
-                      <FaExternalLinkAlt size={11} /> Live Demo
-                    </a>
-                  ) : (
-                    <span className="px-3 py-1.5 rounded-xl bg-white/5 text-gray-400 border border-white/10 text-xs font-medium">
-                      Private Project
-                    </span>
-                  )}
-
-                  {/* External Demo Link for projects with case study that also have a demo */}
-                  {project.hasCaseStudy && project.links.demo && (
-                    <a 
-                      href={project.links.demo} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center gap-1.5"
-                      title="Live Demo"
-                    >
-                      <FaExternalLinkAlt size={11} /> Demo
-                    </a>
-                  )}
-                </div>
-
-              </div>
-            </div>
-          ))}
+              </article>
+            );
+          })}
         </div>
 
+        {/* Dedicated /projects Archive Page Button */}
+        <div className="mt-12 sm:mt-16 pt-8 border-t border-line flex justify-center">
+          <Link
+            href="/projects"
+            className="min-h-[48px] px-6 sm:px-8 py-3 rounded-full border border-line bg-surface hover:border-ink-primary text-ink-primary text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.18em] inline-flex items-center gap-3 transition-all"
+          >
+            <span>
+              Explore Complete Project Archive ({projectsData.length} Projects)
+            </span>
+            <FaArrowRight size={11} />
+          </Link>
+        </div>
       </div>
     </section>
   );

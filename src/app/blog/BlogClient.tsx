@@ -7,6 +7,7 @@ import {
   FaSortAmountDown,
   FaSortAmountUp,
   FaTimes,
+  FaArrowRight,
 } from "react-icons/fa";
 
 interface Post {
@@ -23,46 +24,45 @@ interface BlogClientProps {
   postsJa: Post[];
 }
 
-export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProps) {
-  // State untuk Bahasa, Search, Filter, dan Sort
-  const [lang, setLang] = useState<'id' | 'en' | 'ja'>('id');
+export default function BlogClient({
+  postsId,
+  postsEn,
+  postsJa,
+}: BlogClientProps) {
+  const [lang, setLang] = useState<"id" | "en" | "ja">("id");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("All");
   const [sortOrder, setSortOrder] = useState("newest");
 
-  // Fungsi helper untuk memformat tanggal sesuai bahasa yang dipilih
   const formatDate = (dateString: string, currentLang: string) => {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return dateString;
 
-    if (currentLang === 'ja') {
-      return date.toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+    if (currentLang === "ja") {
+      return date.toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
-  // Pilih dataset berdasarkan bahasa yang aktif
   const allPosts = useMemo(() => {
-    if (lang === 'en') return postsEn;
-    if (lang === 'ja') return postsJa;
+    if (lang === "en") return postsEn;
+    if (lang === "ja") return postsJa;
     return postsId;
   }, [lang, postsId, postsEn, postsJa]);
 
-  // Reset filter tag saat ganti bahasa agar tidak "nyangkut"
-  const handleLangChange = (newLang: 'id' | 'en' | 'ja') => {
+  const handleLangChange = (newLang: "id" | "en" | "ja") => {
     setLang(newLang);
     setSelectedTag("All");
   };
 
-  // Ambil semua tag unik dari post yang aktif
   const allTags = useMemo(() => {
     const tags = new Set<string>(["All"]);
     allPosts.forEach((post) => {
@@ -71,16 +71,17 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
     return Array.from(tags);
   }, [allPosts]);
 
-  // Logika Filter, Search, dan Sorting
   const filteredPosts = useMemo(() => {
-    let results = allPosts.filter((post) => {
+    const results = allPosts.filter((post) => {
       const title = post.title?.toLowerCase() || "";
       const description = post.description?.toLowerCase() || "";
       const search = searchQuery.toLowerCase();
 
-      const matchesSearch = title.includes(search) || description.includes(search);
-      const matchesTag = selectedTag === "All" || (post.tags?.includes(selectedTag) ?? false);
-      
+      const matchesSearch =
+        title.includes(search) || description.includes(search);
+      const matchesTag =
+        selectedTag === "All" || (post.tags?.includes(selectedTag) ?? false);
+
       return matchesSearch && matchesTag;
     });
 
@@ -92,39 +93,49 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
   }, [allPosts, searchQuery, selectedTag, sortOrder]);
 
   return (
-    <>
-      {/* Header Dinamis */}
-      <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-          {lang === 'ja' ? 'ライティング' : lang === 'en' ? 'Writing' : 'Sudut'}{" "}
-          <span className="text-glow-gradient">
-            {lang === 'ja' ? 'コーナー' : lang === 'en' ? 'Corner' : 'Tulisan'}
-          </span>
+    <div>
+      {/* Editorial Header */}
+      <div className="mb-14">
+        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary mb-4">
+          <span>WRITING CORNER</span>
+          <span className="inline-block w-8 h-px bg-ink-muted" />
+          <span className="text-ink-primary">→</span>
+        </div>
+
+        <h1 className="font-serif uppercase text-5xl sm:text-6xl md:text-7xl text-ink-primary tracking-tight leading-[0.95] mb-4">
+          {lang === "ja"
+            ? "ライティング コーナー"
+            : lang === "en"
+            ? "Writing Corner"
+            : "Sudut Tulisan"}
         </h1>
-        <p className="text-gray-400 text-lg">
-          {lang === 'ja' 
-            ? '技術, チュートリアル, そして日常の考え。' 
-            : lang === 'en' 
-            ? 'Sharing my journey in tech, tutorials, and random thoughts.' 
-            : 'Berbagi perjalanan di dunia teknologi, tutorial, dan pemikiran acak.'}
+
+        <p className="text-ink-secondary text-base sm:text-lg max-w-2xl">
+          {lang === "ja"
+            ? "技術、チュートリアル、そして日常の考え。"
+            : lang === "en"
+            ? "Sharing my journey in software architecture, tutorials, and engineering notes."
+            : "Berbagi perjalanan di dunia rekayasa perangkat lunak, tutorial, dan catatan teknis."}
         </p>
       </div>
 
-      {/* Language & Sort Toolbar */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div className="bg-white/5 border border-gray-800 p-1 rounded-xl flex gap-1">
+      {/* Language, Search & Sort Controls */}
+      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 pb-6 border-b border-line mb-6">
+        {/* Clean Editorial Language Switcher */}
+        <div className="flex items-center gap-6 text-xs uppercase tracking-[0.16em]">
           {[
-            { code: 'id', label: 'ID' },
-            { code: 'en', label: 'EN' },
-            { code: 'ja', label: 'JP' }
+            { code: "id", label: "ID" },
+            { code: "en", label: "EN" },
+            { code: "ja", label: "JP" },
           ].map((l) => (
             <button
               key={l.code}
-              onClick={() => handleLangChange(l.code as any)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                lang === l.code 
-                ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" 
-                : "text-gray-500 hover:text-white"
+              type="button"
+              onClick={() => handleLangChange(l.code as "id" | "en" | "ja")}
+              className={`py-2 transition-colors relative ${
+                lang === l.code
+                  ? "text-ink-primary font-bold after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0.5 after:bg-ink-primary"
+                  : "text-ink-secondary hover:text-ink-primary"
               }`}
             >
               {l.label}
@@ -132,93 +143,132 @@ export default function BlogClient({ postsId, postsEn, postsJa }: BlogClientProp
           ))}
         </div>
 
-        <button
-          onClick={() => setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors bg-white/5 border border-gray-800 px-4 py-2 rounded-lg"
-        >
-          {sortOrder === "newest" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-          {/* Label Sortir Dinamis */}
-          {lang === 'ja' 
-            ? (sortOrder === "newest" ? "最新順" : "古い順") 
-            : lang === 'en' 
-            ? (sortOrder === "newest" ? "Latest" : "Oldest") 
-            : (sortOrder === "newest" ? "Terbaru" : "Terlama")}
-        </button>
-      </div>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          {/* Search Input */}
+          <div className="relative w-full sm:w-64">
+            <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-muted text-xs" />
+            <input
+              type="text"
+              placeholder={
+                lang === "ja"
+                  ? "記事を検索..."
+                  : lang === "en"
+                  ? "Search articles..."
+                  : "Cari artikel..."
+              }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full min-h-[40px] bg-surface border border-line rounded-xl py-2 pl-9 pr-8 text-xs sm:text-sm text-ink-primary placeholder-ink-muted focus:outline-none focus:border-ink-primary transition-colors"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-primary"
+              >
+                <FaTimes size={11} />
+              </button>
+            )}
+          </div>
 
-      {/* Search Bar */}
-      <div className="relative group mb-8">
-        <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
-        <input
-          type="text"
-          placeholder={lang === 'ja' ? "記事を検索..." : lang === 'en' ? "Search articles..." : "Cari artikel..."}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-white/5 border border-gray-800 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-blue-500/50 transition-all text-gray-200"
-        />
-        {searchQuery && (
+          {/* Sort Button */}
           <button
-            onClick={() => setSearchQuery("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+            type="button"
+            onClick={() =>
+              setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))
+            }
+            className="min-h-[40px] inline-flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink-secondary hover:text-ink-primary transition-colors bg-surface border border-line px-4 py-2 rounded-xl"
           >
-            <FaTimes />
+            {sortOrder === "newest" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            {lang === "ja"
+              ? sortOrder === "newest"
+                ? "最新順"
+                : "古い順"
+              : lang === "en"
+              ? sortOrder === "newest"
+                ? "Latest"
+                : "Oldest"
+              : sortOrder === "newest"
+              ? "Terbaru"
+              : "Terlama"}
           </button>
-        )}
+        </div>
       </div>
 
-      {/* Tag Filters */}
-      <div className="flex flex-wrap gap-2 mb-12">
+      {/* Minimal Tag Filter Bar */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-12 text-xs">
         {allTags.map((tag) => (
           <button
             key={tag}
+            type="button"
             onClick={() => setSelectedTag(tag)}
-            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all border ${
+            className={`py-1 transition-colors ${
               selectedTag === tag
-                ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
-                : "bg-white/5 border-gray-800 text-gray-400 hover:border-gray-600"
+                ? "text-ink-primary font-bold underline underline-offset-4"
+                : "text-ink-muted hover:text-ink-primary"
             }`}
           >
-            {tag === "All" ? (lang === 'ja' ? "すべて" : tag) : `#${tag}`}
+            {tag === "All"
+              ? lang === "ja"
+                ? "すべて (All)"
+                : "All Topics"
+              : `#${tag}`}
           </button>
         ))}
       </div>
 
-      {/* Grid Posts */}
-      <div className="grid gap-8">
+      {/* Editorial Post List */}
+      <div className="divide-y divide-line border-t border-b border-line">
         {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}?lang=${lang}`}>
-              <article className="glass-card p-6 md:p-8 rounded-2xl hover:border-blue-500/50 transition-all group relative overflow-hidden">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-4">
-                  <h2 className="text-2xl font-bold group-hover:text-blue-400 transition-colors leading-tight">
-                    {post.title}
-                  </h2>
-                  <span className="shrink-0 text-xs md:text-sm text-gray-500 border border-gray-800 px-3 py-1 rounded-full w-fit bg-black/20">
-                    {formatDate(post.date, lang)}
-                  </span>
+          filteredPosts.map((post, idx) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}?lang=${lang}`}
+              className="block py-8 sm:py-10 group"
+            >
+              <article className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-baseline">
+                {/* Date & Index */}
+                <div className="md:col-span-3 text-xs font-mono text-ink-muted flex items-center gap-3">
+                  <span>0{idx + 1}</span>
+                  <span>—</span>
+                  <span>{formatDate(post.date, lang)}</span>
                 </div>
-                <p className="text-gray-400 leading-relaxed mb-6 text-sm md:text-base">
-                  {post.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs font-medium text-gray-500 bg-white/5 border border-gray-800 px-2 py-1 rounded"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
+
+                {/* Title, Excerpt & Tags */}
+                <div className="md:col-span-9 space-y-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <h2 className="text-xl sm:text-2xl font-semibold text-ink-primary group-hover:opacity-70 transition-opacity leading-snug tracking-tight">
+                      {post.title}
+                    </h2>
+                    <FaArrowRight
+                      size={12}
+                      className="text-ink-muted group-hover:text-ink-primary group-hover:translate-x-1 transition-all shrink-0 mt-2"
+                    />
+                  </div>
+
+                  <p className="text-ink-secondary leading-relaxed text-sm sm:text-base">
+                    {post.description}
+                  </p>
+
+                  {post.tags && post.tags.length > 0 && (
+                    <p className="text-xs font-mono text-ink-muted pt-1">
+                      {post.tags.map((t) => `#${t}`).join(" · ")}
+                    </p>
+                  )}
                 </div>
               </article>
             </Link>
           ))
         ) : (
-          <div className="text-center py-20 bg-white/5 border border-dashed border-gray-800 rounded-2xl text-gray-500">
-            {lang === 'ja' ? "記事が見つかりませんでした。" : lang === 'en' ? "No articles found." : "Artikel tidak ditemukan."}
+          <div className="text-center py-16 text-ink-secondary text-sm">
+            {lang === "ja"
+              ? "記事が見つかりませんでした。"
+              : lang === "en"
+              ? "No articles found."
+              : "Artikel tidak ditemukan."}
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

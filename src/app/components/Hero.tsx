@@ -1,52 +1,149 @@
 import React from "react";
-import { FaExternalLinkAlt, FaRocket } from "react-icons/fa";
+import Image from "next/image";
+import Link from "next/link";
+import { FaArrowRight, FaFileAlt } from "react-icons/fa";
 
 const Hero: React.FC = () => {
   return (
-    <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden px-4 pt-20">
-      
-      {/* Ambient Background Glow Orbs */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[650px] h-[350px] md:h-[650px] bg-blue-600/15 rounded-full blur-[140px] -z-10 animate-pulse-glow pointer-events-none" />
-      <div className="absolute top-1/2 left-1/3 w-[250px] md:w-[450px] h-[250px] md:h-[450px] bg-cyan-500/10 rounded-full blur-[120px] -z-10 animate-float-delayed pointer-events-none" />
+    <section id="home" className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-5 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* 1. MONUMENTAL EDITORIAL SERIF HEADLINE + FULLY ROUNDED STEPPED PORTRAIT CONTAINER */}
+        <div>
+          {/* Line 1 sits cleanly above the portrait container */}
+          <h1 className="font-serif uppercase text-ink-primary tracking-[-0.02em] leading-[0.92] text-[2.5rem] sm:text-7xl md:text-8xl lg:text-[6.25rem] font-normal select-none">
+            <span className="block pb-1 sm:pb-2">HEY, I&apos;M AREL</span>
+          </h1>
 
-      <div className="relative z-10 max-w-4xl space-y-6 animate-fade-in-up">
-        
-        {/* Main Headline */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
-          Hi, I'm <span className="text-glow-gradient">Arel Zandra</span>
-          <br />
-          <span className="text-gray-400 text-3xl sm:text-4xl md:text-5xl font-semibold mt-3 block">
-            Full-Stack & Data Engineer
-          </span>
-        </h1>
+          {/* Wide Rounded Portrait Banner with Stepped Rounded Cutouts */}
+          <div className="relative rounded-[24px] sm:rounded-[36px] overflow-hidden bg-[#DDE1E8] h-[260px] sm:h-[390px] md:h-[460px] lg:h-[520px]">
+            {/* Top-Left Stepped Cutout for "ZANDRA" with Smooth Inverted Rounded Corners */}
+            <div className="absolute top-0 left-0 z-20 bg-canvas pr-5 sm:pr-10 pb-2 sm:pb-4 rounded-br-[24px] sm:rounded-br-[36px]">
+              <span className="block font-serif uppercase text-ink-primary tracking-[-0.02em] leading-[0.88] text-[2.5rem] sm:text-7xl md:text-8xl lg:text-[6.25rem] font-normal select-none">
+                ZANDRA
+              </span>
 
-        {/* Subtext Description */}
-        <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed mt-4 font-light">
-          Informatics Engineering student at <span className="text-white font-medium">Politeknik Negeri Bandung</span>.<br /> 
-          Bridging the gap between intuitive front-end interfaces, high-concurrency back-end logic, and data engineering pipelines.
-        </p>
+              {/* Top-Right Inverted Corner Scoop (Rounds the top edge of the photo container) */}
+              <svg
+                className="w-6 h-6 sm:w-9 sm:h-9 text-canvas fill-current absolute top-0 -right-6 sm:-right-9 overflow-visible pointer-events-none"
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <path d="M-2 36 L0 36 A36 36 0 0 1 36 0 L36 -2 L-2 -2 Z" />
+              </svg>
 
-        {/* Call to Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10 pt-2">
-          <a 
-            href="#projects"
-            className="btn-primary shimmer-container px-8 py-3.5 rounded-2xl font-bold text-base md:text-lg shadow-lg flex items-center gap-2 group"
-          >
-            <FaRocket className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            View Featured Work
-          </a>
-          
-          <a 
-            href="https://drive.google.com/file/d/12io5xiNZb28nr_xbRPaMY8xxm8hx7gRZ/view?usp=sharing"
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group shimmer-container flex items-center gap-2 px-8 py-3.5 rounded-2xl border border-white/15 bg-white/5 text-gray-200 font-medium hover:bg-white/10 hover:border-white/40 transition-all hover:text-white text-base md:text-lg shadow-md"
-          >
-            <FaExternalLinkAlt className="text-gray-400 group-hover:text-white transition-colors" />
-            View Resume
-          </a>
+              {/* Bottom-Left Inverted Corner Scoop (Rounds the left edge of the photo container) */}
+              <svg
+                className="w-6 h-6 sm:w-9 sm:h-9 text-canvas fill-current absolute -bottom-6 sm:-bottom-9 left-0 overflow-visible pointer-events-none"
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <path d="M-2 36 L0 36 A36 36 0 0 1 36 0 L36 -2 L-2 -2 Z" />
+              </svg>
+            </div>
+
+            <Image
+              src="/images/foto-arel-hero.jpg"
+              alt="Farrel Zandra — Frontend & Full-Stack Engineer"
+              fill
+              priority
+              sizes="(max-width: 1200px) 100vw, 1152px"
+              className="object-cover object-[72%_center] sm:object-center"
+            />
+
+            {/* Bottom-Left Subtle Role Caption */}
+            <div className="hidden sm:block absolute bottom-6 left-8 z-10">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-ink-primary/80">
+                Frontend &amp; Full-Stack Engineer
+              </p>
+            </div>
+
+            {/* Bottom-Right Stepped Cutout for Floating Circular "Work ↓" Badge */}
+            <div className="absolute bottom-0 right-0 z-20 bg-canvas pl-2.5 pt-2.5 sm:pl-3.5 sm:pt-3.5 rounded-tl-[26px] sm:rounded-tl-[36px]">
+              {/* Top-Right Inverted Corner Scoop */}
+              <svg
+                className="w-6 h-6 sm:w-8 sm:h-8 text-canvas fill-current absolute -top-6 sm:-top-8 right-0 overflow-visible pointer-events-none"
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <path d="M38 0 L36 0 A36 36 0 0 1 0 36 L0 38 L38 38 Z" />
+              </svg>
+
+              {/* Bottom-Left Inverted Corner Scoop */}
+              <svg
+                className="w-6 h-6 sm:w-8 sm:h-8 text-canvas fill-current absolute bottom-0 -left-6 sm:-left-8 overflow-visible pointer-events-none"
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <path d="M38 0 L36 0 A36 36 0 0 1 0 36 L0 38 L38 38 Z" />
+              </svg>
+
+              <a
+                href="#projects"
+                aria-label="Scroll to Featured Work"
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-surface text-ink-primary flex flex-col items-center justify-center shadow-sm hover:scale-105 transition-transform border border-line"
+              >
+                <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest">
+                  Work
+                </span>
+                <span className="text-[10px] sm:text-xs leading-none mt-0.5">
+                  ↓
+                </span>
+              </a>
+            </div>
+          </div>
         </div>
 
+        {/* 2. CONCISE, INTRIGUING EDITORIAL "ABOUT ->" HOOK */}
+        <div className="mt-10 sm:mt-20 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 items-start">
+          {/* Left Micro Label */}
+          <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
+            <span>ABOUT</span>
+            <span className="inline-block w-8 h-px bg-ink-muted" />
+            <span className="text-ink-primary">→</span>
+          </div>
+
+          {/* Right Dual-Tone Concise Narrative Hook */}
+          <div className="md:col-span-8 space-y-5 sm:space-y-6">
+            <p className="text-lg sm:text-2xl lg:text-[1.75rem] leading-[1.48] sm:leading-[1.38] font-normal text-ink-primary tracking-tight">
+              I engineer{" "}
+              <span className="text-ink-muted">
+                production web platforms
+              </span>{" "}
+              and{" "}
+              <span className="text-ink-muted">
+                autonomous data systems
+              </span>{" "}
+              — translating complex{" "}
+              <span className="text-ink-muted">system specifications</span>{" "}
+              and{" "}
+              <span className="text-ink-muted">TB-scale telemetry</span> into
+              calm, high-speed interfaces.
+            </p>
+
+            {/* Clean Editorial Action Links */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-3 border-t border-line">
+              <a
+                href="#projects"
+                className="min-h-[44px] inline-flex items-center gap-2.5 text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-ink-primary hover:opacity-70 transition-opacity"
+              >
+                Explore Selected Work
+                <FaArrowRight size={11} />
+              </a>
+
+              <span className="hidden sm:inline text-line" aria-hidden="true">
+                /
+              </span>
+
+              <Link
+                href="/resume"
+                className="min-h-[44px] inline-flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-ink-secondary hover:text-ink-primary transition-colors"
+              >
+                <FaFileAlt size={12} />
+                Read Full Resume
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

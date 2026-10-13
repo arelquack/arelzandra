@@ -1,8 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
-import { Package, CheckCircle2, XCircle, Tag, Loader2, Code2, Database, Trash2, ArrowRightLeft, PlusCircle } from "lucide-react";
+import {
+  Package,
+  CheckCircle2,
+  XCircle,
+  Tag,
+  Loader2,
+  Code2,
+  Database,
+  Trash2,
+  ArrowRightLeft,
+  PlusCircle,
+} from "lucide-react";
 
 interface Aset {
   id: number;
@@ -36,18 +46,14 @@ const QUIZ_STEPS = [
   { id: 22, title: "TODO 22: Looping Data", desc: "Fungsi array untuk mengubah data jadi komponen HTML.", snippet: "{dataAset._______((item) => ( ... ))}", options: ["filter", "forEach", "reduce", "map"], answer: "map" },
   { id: 23, title: "TODO 23: Prop Key", desc: "Berikan identifier unik agar React tidak bingung.", snippet: "key={item._______}", options: ["index", "key", "id", "nama"], answer: "id" },
   { id: 24, title: "TODO 24: Render Teks", desc: "Cetak teks nama aset.", snippet: "<h3>{_______}</h3>", options: ["nama", "item.nama", "aset.nama", "item.name"], answer: "item.nama" },
-  { id: 25, title: "TODO 25: Conditional Status", desc: "Cek flag status untuk warna badge.", snippet: "{item._______ === 'tersedia' ? ...}", options: ["kondisi", "state", "status", "isTersedia"], answer: "status" } 
+  { id: 25, title: "TODO 25: Conditional Status", desc: "Cek flag status untuk warna badge.", snippet: "{item._______ === 'tersedia' ? ...}", options: ["kondisi", "state", "status", "isTersedia"], answer: "status" },
 ];
 
 export default function LatihanAsetQuizPage() {
-  const router = useRouter();
-  
-  // State untuk Kuis
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
-  
-  // State untuk Live UI (Setelah Selesai)
+
   const [liveData, setLiveData] = useState<Aset[]>([]);
   const [formNama, setFormNama] = useState("");
   const [formKategori, setFormKategori] = useState("");
@@ -61,7 +67,6 @@ export default function LatihanAsetQuizPage() {
   const isFinished = currentStep >= QUIZ_STEPS.length;
   const progressPercent = Math.min((currentStep / QUIZ_STEPS.length) * 100, 100);
 
-  // --- FUNGSI INTERAKTIF REAL ---
   const fetchAset = async () => {
     try {
       const response = await fetch("/api/aset");
@@ -71,7 +76,6 @@ export default function LatihanAsetQuizPage() {
     }
   };
 
-  // Otomatis fetch data asli dari backend Next.js kalau kuis beres
   useEffect(() => {
     if (isFinished) fetchAset();
   }, [isFinished]);
@@ -79,18 +83,22 @@ export default function LatihanAsetQuizPage() {
   const handleTambahAset = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFinished) return;
-    
+
     setIsSubmitting(true);
     try {
       const response = await fetch("/api/aset", {
-        method: "POST", 
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nama: formNama, kategori: formKategori, status: "tersedia" }) 
+        body: JSON.stringify({
+          nama: formNama,
+          kategori: formKategori,
+          status: "tersedia",
+        }),
       });
       if (response.ok) {
-        setFormNama(""); 
-        setFormKategori(""); 
-        fetchAset(); 
+        setFormNama("");
+        setFormKategori("");
+        fetchAset();
       }
     } finally {
       setIsSubmitting(false);
@@ -105,7 +113,9 @@ export default function LatihanAsetQuizPage() {
     try {
       await fetch(`/api/aset/${id}`, { method: "DELETE" });
       fetchAset();
-    } catch (error) { console.error(error); }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleToggleStatus = async (id: number, statusSaatIni: string) => {
@@ -115,13 +125,14 @@ export default function LatihanAsetQuizPage() {
       await fetch(`/api/aset/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: statusBaru })
+        body: JSON.stringify({ status: statusBaru }),
       });
       fetchAset();
-    } catch (error) { console.error(error); }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Logika Kuis
   const handleAnswer = (answer: string) => {
     setSelectedAnswer(answer);
     if (answer === QUIZ_STEPS[currentStep].answer) {
@@ -129,207 +140,278 @@ export default function LatihanAsetQuizPage() {
       setTimeout(() => {
         setSelectedAnswer(null);
         setCurrentStep((prev) => prev + 1);
-      }, 600);
+      }, 500);
     } else {
       setIsError(true);
       setTimeout(() => {
         setSelectedAnswer(null);
         setIsError(false);
-      }, 1000);
+      }, 900);
     }
   };
 
-  // Pilih data mana yang mau di-render (Mock vs Real)
   const displayData = isFinished ? liveData : mockAset;
 
   return (
-    // Tambahkan not-prose dan manipulasi width agar kuis melebar melampaui batas artikel
-    <div className="not-prose w-full max-w-6xl mx-auto bg-[#050505] text-white p-6 font-sans flex flex-col md:flex-row gap-8 rounded-2xl border border-white/10 my-12 shadow-[0_0_40px_rgba(37,99,235,0.15)]">
-      
-      {/* KIRI: PANEL KUIS */}
-      <div className="w-full md:w-[35%] flex flex-col gap-6">
-        <div className="mb-2">
-          <h1 className="text-xl font-black tracking-tighter uppercase text-blue-500 flex items-center gap-2">
-            <Code2 className="w-6 h-6" /> Misi Integrasi
-          </h1>
-          <p className="text-white/50 text-sm mt-1">Selesaikan 25 tahap untuk membuka UI!</p>
+    <div className="not-prose w-full bg-surface text-ink-primary p-6 sm:p-10 font-sans flex flex-col lg:flex-row gap-8 rounded-[28px] border border-line my-10 shadow-[0_12px_32px_rgba(20,20,22,0.03)]">
+      {/* Left: Quiz Panel */}
+      <div className="w-full lg:w-[40%] flex flex-col gap-6">
+        <div className="border-b border-line pb-4">
+          <p className="text-[11px] font-mono uppercase tracking-[0.16em] text-ink-muted mb-1">
+            INTERACTIVE FULL-STACK CRUD SANDBOX
+          </p>
+          <h2 className="font-serif uppercase text-2xl sm:text-3xl text-ink-primary tracking-tight flex items-center gap-2.5">
+            <Code2 className="w-5 h-5 text-ink-primary" /> Misi Integrasi API
+          </h2>
+          <p className="text-ink-secondary text-xs sm:text-sm mt-1">
+            Selesaikan 25 tahap React Hooks &amp; REST API untuk mengaktifkan UI
+            secara live.
+          </p>
         </div>
 
         {!isFinished ? (
-          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm relative overflow-hidden flex flex-col min-h-[420px]">
-            <div className="absolute top-0 left-0 h-1.5 bg-white/10 w-full">
-              <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${progressPercent}%` }} />
-            </div>
-            
-            <div className="text-[10px] font-bold text-blue-500 uppercase tracking-widest mb-3 mt-2 flex justify-between items-center">
-              <span>Pertanyaan {currentStep + 1} / {QUIZ_STEPS.length}</span>
-              <span className="text-white/30">{Math.round(progressPercent)}%</span>
-            </div>
-            
-            <h2 className="text-lg font-bold mb-1">{QUIZ_STEPS[currentStep].title}</h2>
-            <p className="text-white/60 text-sm mb-6">{QUIZ_STEPS[currentStep].desc}</p>
+          <div className="bg-surface-muted border border-line p-6 rounded-2xl flex flex-col flex-grow justify-between space-y-5">
+            <div>
+              <div className="h-1.5 bg-line rounded-full w-full overflow-hidden mb-4">
+                <div
+                  className="h-full bg-ink-primary transition-all duration-300"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
 
-            <div className="bg-[#0a0a0a] p-4 rounded-lg font-mono text-sm text-blue-400 mb-6 border border-white/5 shadow-inner">
-              {QUIZ_STEPS[currentStep].snippet}
+              <div className="text-[11px] font-mono uppercase tracking-wider mb-3 flex justify-between items-center text-ink-muted">
+                <span>
+                  Step {currentStep + 1} / {QUIZ_STEPS.length}
+                </span>
+                <span>{Math.round(progressPercent)}%</span>
+              </div>
+
+              <h3 className="text-base sm:text-lg font-semibold text-ink-primary mb-1">
+                {QUIZ_STEPS[currentStep].title}
+              </h3>
+              <p className="text-ink-secondary text-xs sm:text-sm mb-4">
+                {QUIZ_STEPS[currentStep].desc}
+              </p>
+
+              <div className="bg-surface text-ink-primary p-4 rounded-xl font-mono text-xs sm:text-sm border border-line overflow-x-auto">
+                {QUIZ_STEPS[currentStep].snippet}
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 mt-auto">
+            <div className="grid grid-cols-1 gap-2.5">
               {QUIZ_STEPS[currentStep].options.map((opt) => {
                 const isSelected = selectedAnswer === opt;
-                const isCorrect = isSelected && opt === QUIZ_STEPS[currentStep].answer;
+                const isCorrect =
+                  isSelected && opt === QUIZ_STEPS[currentStep].answer;
                 const isWrong = isSelected && isError;
 
                 return (
                   <button
                     key={opt}
+                    type="button"
                     onClick={() => !selectedAnswer && handleAnswer(opt)}
                     disabled={selectedAnswer !== null}
-                    className={`p-3 rounded-lg border text-left font-mono text-sm transition-all duration-300 flex justify-between items-center
-                      ${isCorrect ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : 
-                        isWrong ? "bg-rose-500/20 border-rose-500 text-rose-400" : 
-                        "bg-white/5 border-white/10 hover:border-blue-500/50 hover:bg-blue-900/30 text-white"
-                      }`}
+                    className={`p-3 rounded-xl border text-left font-mono text-xs sm:text-sm transition-colors flex justify-between items-center ${
+                      isCorrect
+                        ? "bg-ink-primary border-ink-primary text-ink-inverse font-semibold"
+                        : isWrong
+                        ? "bg-surface border-ink-primary text-ink-primary font-semibold"
+                        : "bg-surface border-line text-ink-primary hover:border-ink-primary"
+                    }`}
                   >
-                    {opt}
-                    {isCorrect && <CheckCircle2 className="w-4 h-4" />}
-                    {isWrong && <XCircle className="w-4 h-4" />}
+                    <span>{opt}</span>
+                    {isCorrect && (
+                      <CheckCircle2 className="w-4 h-4 text-ink-inverse" />
+                    )}
+                    {isWrong && (
+                      <XCircle className="w-4 h-4 text-ink-primary" />
+                    )}
                   </button>
                 );
               })}
             </div>
           </div>
         ) : (
-          <div className="bg-blue-500/10 border border-blue-500/30 p-6 rounded-2xl text-center flex flex-col justify-center min-h-[420px] relative overflow-hidden shadow-[0_0_30px_rgba(37,99,235,0.2)]">
-            <div className="w-20 h-20 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10" />
+          <div className="bg-surface-muted border border-line p-8 rounded-2xl text-center flex flex-col justify-center flex-grow space-y-3">
+            <div className="w-14 h-14 bg-surface text-ink-primary rounded-full flex items-center justify-center mx-auto border border-line">
+              <CheckCircle2 className="w-7 h-7 text-ink-primary" />
             </div>
-            <h2 className="text-2xl font-black text-blue-400 mb-2 uppercase tracking-tight">System Online!</h2>
-            <p className="text-sm text-blue-300/80 mb-6">Luar biasa! 25 tahap integrasi selesai. Silakan coba fiturnya di layar sebelah kanan!</p>
+            <h3 className="font-serif uppercase text-2xl text-ink-primary">
+              System Online
+            </h3>
+            <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed">
+              Seluruh 25 tahap integrasi selesai! Silakan uji fitur tambah,
+              ubah status, dan hapus aset di panel sebelah kanan.
+            </p>
           </div>
         )}
       </div>
 
-      {/* KANAN: LIVE PREVIEW DYNAMIC */}
-      <div className="w-full md:w-[65%] bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 relative flex flex-col min-h-[600px] overflow-hidden">
-        <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/10 z-20">
-          <div className={`w-2 h-2 rounded-full animate-pulse ${isFinished ? 'bg-emerald-500' : 'bg-blue-500'}`} />
-          <span className="text-[10px] uppercase font-bold tracking-widest text-white/50">
-            {isFinished ? 'Sistem Terhubung (Live API)' : 'Membangun UI...'}
+      {/* Right: Live Preview Dynamic */}
+      <div className="w-full lg:w-[60%] bg-surface-muted border border-line rounded-2xl p-6 sm:p-8 relative flex flex-col min-h-[520px]">
+        <div className="flex items-center justify-between pb-4 mb-6 border-b border-line">
+          <span className="text-xs font-mono uppercase tracking-[0.16em] text-ink-muted">
+            {isFinished
+              ? "LIVE CONNECTED API (/api/aset)"
+              : "PROGRESSIVE UI BUILDER"}
+          </span>
+          <span className="text-xs font-mono font-semibold text-ink-primary">
+            {isFinished ? "ACTIVE" : `STAGE ${currentStep}/25`}
           </span>
         </div>
 
-        {/* State 1: Fase Backend Logic */}
+        {/* State 1: Backend Logic Phase */}
         {currentStep < 19 && (
-          <div className="m-auto text-center flex flex-col items-center justify-center opacity-30 animate-in fade-in duration-500">
-            {currentStep < 7 && <><Database className="w-16 h-16 mb-4 mx-auto text-blue-500" /><p>Fase 1: State & Sinkronisasi</p></>}
-            {currentStep >= 7 && currentStep < 13 && <><PlusCircle className="w-16 h-16 mb-4 mx-auto text-blue-500" /><p>Fase 2: Create (POST)</p></>}
-            {currentStep >= 13 && currentStep < 19 && <><ArrowRightLeft className="w-16 h-16 mb-4 mx-auto text-blue-500" /><p>Fase 3: Delete & Update</p></>}
+          <div className="m-auto text-center flex flex-col items-center justify-center text-ink-muted py-12 space-y-3">
+            {currentStep < 7 && (
+              <>
+                <Database className="w-12 h-12 mx-auto text-ink-primary" />
+                <p className="font-mono text-xs uppercase tracking-widest text-ink-primary">
+                  Phase 01: State &amp; Lifecycle Synchronization
+                </p>
+              </>
+            )}
+            {currentStep >= 7 && currentStep < 13 && (
+              <>
+                <PlusCircle className="w-12 h-12 mx-auto text-ink-primary" />
+                <p className="font-mono text-xs uppercase tracking-widest text-ink-primary">
+                  Phase 02: Create Payload (HTTP POST)
+                </p>
+              </>
+            )}
+            {currentStep >= 13 && currentStep < 19 && (
+              <>
+                <ArrowRightLeft className="w-12 h-12 mx-auto text-ink-primary" />
+                <p className="font-mono text-xs uppercase tracking-widest text-ink-primary">
+                  Phase 03: Mutation &amp; Deletion (PATCH &amp; DELETE)
+                </p>
+              </>
+            )}
           </div>
         )}
 
         {/* State 2 & 3: Progressive Disclosure UI -> Fully Interactive */}
         {currentStep >= 19 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 animate-in fade-in zoom-in duration-700 w-full h-full">
-            
-            {/* Form Tambah */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full h-full">
+            {/* Add Asset Form */}
             <div className="md:col-span-1">
-              <div className={`bg-white/5 border border-white/10 p-6 rounded-2xl transition-opacity duration-500 ${!isFinished ? 'opacity-70' : ''}`}>
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <PlusCircle className="text-blue-500 w-5 h-5" /> Tambah
-                </h2>
-                <form onSubmit={handleTambahAset} className="flex flex-col gap-4">
-                  <input 
-                    value={isFinished ? formNama : ""} 
+              <div
+                className={`bg-surface border border-line p-5 rounded-2xl transition-opacity ${
+                  !isFinished ? "opacity-75" : ""
+                }`}
+              >
+                <h3 className="text-sm font-mono uppercase tracking-[0.14em] text-ink-primary mb-4 flex items-center gap-2">
+                  <PlusCircle className="w-4 h-4" /> Tambah Aset
+                </h3>
+                <form
+                  onSubmit={handleTambahAset}
+                  className="flex flex-col gap-3"
+                >
+                  <input
+                    value={isFinished ? formNama : ""}
                     onChange={(e) => setFormNama(e.target.value)}
-                    disabled={!isFinished || isSubmitting} 
-                    placeholder={currentStep >= 20 && !isFinished ? "Nama Aset (Binded)" : "Nama Aset"} 
-                    className={`w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm transition-colors ${!isFinished ? 'cursor-not-allowed opacity-50' : 'focus:border-blue-500 focus:outline-none'}`} 
+                    disabled={!isFinished || isSubmitting}
+                    placeholder={
+                      currentStep >= 20 && !isFinished
+                        ? "Nama Aset (Bound)"
+                        : "Nama Aset"
+                    }
+                    className="w-full bg-surface-muted border border-line rounded-xl p-2.5 text-xs sm:text-sm text-ink-primary focus:border-ink-primary focus:outline-none disabled:opacity-50"
                     required={isFinished}
                   />
-                  <input 
-                    value={isFinished ? formKategori : ""} 
+                  <input
+                    value={isFinished ? formKategori : ""}
                     onChange={(e) => setFormKategori(e.target.value)}
-                    disabled={!isFinished || isSubmitting} 
-                    placeholder="Kategori" 
-                    className={`w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm transition-colors ${!isFinished ? 'cursor-not-allowed opacity-50' : 'focus:border-blue-500 focus:outline-none'}`} 
+                    disabled={!isFinished || isSubmitting}
+                    placeholder="Kategori"
+                    className="w-full bg-surface-muted border border-line rounded-xl p-2.5 text-xs sm:text-sm text-ink-primary focus:border-ink-primary focus:outline-none disabled:opacity-50"
                     required={isFinished}
                   />
-                  <button 
-                    type="submit" 
-                    disabled={currentStep < 21 || !isFinished || isSubmitting} 
-                    className={`w-full font-bold py-2.5 rounded-lg transition-all ${
-                      isFinished && !isSubmitting ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25' : 
-                      currentStep >= 21 ? 'bg-blue-600/30 text-white/50 cursor-not-allowed' : 'bg-white/10 text-white/30 cursor-not-allowed'
-                    }`}
+                  <button
+                    type="submit"
+                    disabled={currentStep < 21 || !isFinished || isSubmitting}
+                    className="min-h-[40px] w-full font-semibold text-xs uppercase tracking-[0.14em] py-2.5 rounded-full bg-ink-primary text-ink-inverse hover:opacity-90 disabled:opacity-30 transition-opacity"
                   >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Simpan"}
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+                    ) : (
+                      "Simpan"
+                    )}
                   </button>
                 </form>
               </div>
             </div>
 
-            {/* List Data */}
+            {/* Asset List */}
             <div className="md:col-span-2">
-              <h2 className="text-lg font-bold mb-4">Daftar Aset</h2>
-              <div className="flex flex-col gap-4 overflow-y-auto max-h-[450px] pr-2 custom-scrollbar">
+              <h3 className="text-sm font-mono uppercase tracking-[0.14em] text-ink-primary mb-4">
+                Daftar Aset Inventaris
+              </h3>
+              <div className="flex flex-col gap-3 overflow-y-auto max-h-[420px]">
                 {currentStep < 21 ? (
-                   <div className="flex items-center justify-center p-8 border border-dashed border-white/10 rounded-xl text-white/30 h-32">
-                     <Loader2 className="w-6 h-6 animate-spin mr-2" /> Menunggu map()...
-                   </div>
+                  <div className="flex items-center justify-center p-8 border border-dashed border-line rounded-2xl text-ink-muted text-xs font-mono h-32">
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" /> Menunggu
+                    array .map()...
+                  </div>
                 ) : (
                   displayData.map((item, index) => (
-                    <div key={item.id || index} className={`bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all duration-700 ${isFinished ? 'hover:border-blue-500/30' : ''}`}>
-                      <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-lg transition-colors duration-500 ${currentStep >= 22 ? 'bg-blue-500/10 text-blue-400' : 'bg-white/5 text-white/20'}`}>
-                          <Package className="w-5 h-5" />
+                    <div
+                      key={item.id || index}
+                      className="bg-surface border border-line p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="p-2.5 rounded-xl bg-surface-muted text-ink-primary">
+                          <Package className="w-4 h-4" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-md leading-tight mb-1">
-                            {currentStep >= 24 ? item.nama : <span className="inline-block w-24 h-4 bg-white/10 rounded animate-pulse"></span>}
-                          </h3>
+                          <h4 className="font-semibold text-sm text-ink-primary leading-tight mb-1">
+                            {currentStep >= 24 ? (
+                              item.nama
+                            ) : (
+                              <span className="inline-block w-24 h-3.5 bg-surface-muted rounded" />
+                            )}
+                          </h4>
                           {currentStep >= 24 && (
-                            <div className="flex items-center gap-1 text-[11px] text-white/50 uppercase font-semibold">
+                            <div className="flex items-center gap-1 text-[11px] font-mono text-ink-muted uppercase">
                               <Tag className="w-3 h-3" /> {item.kategori}
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-white/10 pt-3 sm:pt-0">
+                      <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-line pt-3 sm:pt-0">
                         {currentStep >= 25 ? (
-                          item.status === "tersedia" ? (
-                            <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-400">Tersedia</span>
-                          ) : (
-                            <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-amber-500/10 text-amber-400">Dipinjam</span>
-                          )
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase border border-line bg-surface-muted text-ink-primary">
+                            {item.status === "tersedia"
+                              ? "Tersedia"
+                              : "Dipinjam"}
+                          </span>
                         ) : (
-                          <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-white/5 text-white/20">Hidden</span>
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-mono uppercase bg-surface-muted text-ink-muted">
+                            Hidden
+                          </span>
                         )}
-                        
-                        <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
-                        
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => handleToggleStatus(item.id, item.status)}
+
+                        <div className="flex gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleToggleStatus(item.id, item.status)
+                            }
                             disabled={!isFinished}
                             title="Ubah Status"
-                            className={`p-2 rounded-lg border transition-colors ${
-                              isFinished ? 'bg-white/5 border-white/10 text-white/80 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/50' : 
-                              currentStep >= 25 ? 'bg-white/5 border-white/10 text-white/50 cursor-not-allowed' : 'bg-transparent border-transparent text-white/10 cursor-not-allowed'
-                            }`}
+                            className="p-2 rounded-xl border border-line bg-surface text-ink-primary hover:border-ink-primary disabled:opacity-30 transition-colors"
                           >
-                            <ArrowRightLeft className="w-4 h-4" />
+                            <ArrowRightLeft className="w-3.5 h-3.5" />
                           </button>
-                          <button 
+                          <button
+                            type="button"
                             onClick={() => handleDelete(item.id)}
                             disabled={!isFinished}
                             title="Hapus Aset"
-                            className={`p-2 rounded-lg border transition-colors ${
-                              isFinished ? 'bg-white/5 border-white/10 text-white/80 hover:bg-rose-500/20 hover:text-rose-400 hover:border-rose-500/50' : 
-                              currentStep >= 25 ? 'bg-white/5 border-white/10 text-white/50 cursor-not-allowed' : 'bg-transparent border-transparent text-white/10 cursor-not-allowed'
-                            }`}
+                            className="p-2 rounded-xl border border-line bg-surface text-ink-primary hover:border-red-500 hover:text-red-600 disabled:opacity-30 transition-colors"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>

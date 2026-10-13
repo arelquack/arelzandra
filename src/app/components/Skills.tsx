@@ -1,174 +1,266 @@
-"use client";
-import React, { useState, useMemo } from "react";
-import { 
-  SiTypescript, SiJavascript, SiPython, SiGo, SiHtml5, 
-  SiReact, SiNextdotjs, SiVuedotjs, SiNuxtdotjs, SiTailwindcss,
-  SiNodedotjs, SiFastapi, SiPostgresql, SiSupabase, 
-  SiDocker, SiGithubactions, SiVercel, SiEslint, SiLinux, SiCloudinary 
+import React from "react";
+import { IconType } from "react-icons";
+import {
+  SiNextdotjs,
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiMui,
+  SiFramer,
+  SiFlutter,
+  SiNestjs,
+  SiNodedotjs,
+  SiExpress,
+  SiFastapi,
+  SiPostgresql,
+  SiClickhouse,
+  SiPython,
+  SiPrisma,
+  SiSupabase,
+  SiN8N,
+  SiGooglegemini,
+  SiApacheairflow,
+  SiDatadog,
+  SiGithubactions,
+  SiDocker,
+  SiLinux,
+  SiTurborepo,
 } from "react-icons/si";
-import { FaGitAlt, FaServer, FaNetworkWired, FaSearch } from "react-icons/fa";
+import {
+  FaClipboardCheck,
+  FaProjectDiagram,
+  FaBolt,
+} from "react-icons/fa";
 
-export interface SkillItem {
+interface SkillItem {
   name: string;
-  category: "frontend" | "backend" | "devops";
-  badge: string;
-  icon: React.ElementType;
-  color: string;
+  detail: string;
+  icons: IconType[];
 }
 
-const allSkills: SkillItem[] = [
-  // Languages & Frontend
-  { name: "JavaScript", category: "frontend", badge: "Language", icon: SiJavascript, color: "#F7DF1E" },
-  { name: "TypeScript", category: "frontend", badge: "Language", icon: SiTypescript, color: "#3178C6" },
-  { name: "Python", category: "frontend", badge: "Language", icon: SiPython, color: "#3776AB" },
-  { name: "Golang", category: "frontend", badge: "Language", icon: SiGo, color: "#00ADD8" },
-  { name: "HTML5 / CSS3", category: "frontend", badge: "Frontend", icon: SiHtml5, color: "#E34F26" },
-  { name: "React.js", category: "frontend", badge: "Frontend", icon: SiReact, color: "#61DAFB" },
-  { name: "Next.js", category: "frontend", badge: "Frontend", icon: SiNextdotjs, color: "#FFFFFF" },
-  { name: "Vue.js", category: "frontend", badge: "Frontend", icon: SiVuedotjs, color: "#4FC08D" },
-  { name: "Nuxt.js", category: "frontend", badge: "Frontend", icon: SiNuxtdotjs, color: "#00DC82" },
-  { name: "Tailwind CSS", category: "frontend", badge: "Frontend", icon: SiTailwindcss, color: "#06B6D4" },
+interface SkillGroup {
+  number: string;
+  title: string;
+  summary: string;
+  items: SkillItem[];
+}
 
-  // Backend & Databases
-  { name: "Node.js", category: "backend", badge: "Backend Runtime", icon: SiNodedotjs, color: "#339933" },
-  { name: "FastAPI (Python)", category: "backend", badge: "Backend Framework", icon: SiFastapi, color: "#009688" },
-  { name: "Golang Backend", category: "backend", badge: "Backend Language", icon: SiGo, color: "#00ADD8" },
-  { name: "PostgreSQL", category: "backend", badge: "Database", icon: SiPostgresql, color: "#4169E1" },
-  { name: "Supabase", category: "backend", badge: "BaaS / DB", icon: SiSupabase, color: "#3ECF8E" },
-  { name: "RESTful APIs", category: "backend", badge: "Architecture", icon: FaServer, color: "#3B82F6" },
-  { name: "Distributed Systems", category: "backend", badge: "Architecture", icon: FaNetworkWired, color: "#8B5CF6" },
-
-  // DevOps & Tools
-  { name: "Docker (Engine/CLI)", category: "devops", badge: "Containerization", icon: SiDocker, color: "#2496ED" },
-  { name: "Git / GitHub", category: "devops", badge: "Version Control", icon: FaGitAlt, color: "#F05032" },
-  { name: "GitHub Actions", category: "devops", badge: "CI/CD Pipeline", icon: SiGithubactions, color: "#2088FF" },
-  { name: "Vercel", category: "devops", badge: "Cloud Platform", icon: SiVercel, color: "#FFFFFF" },
-  { name: "ESLint & Prettier", category: "devops", badge: "Code Quality", icon: SiEslint, color: "#4B32C3" },
-  { name: "Linux / Unix", category: "devops", badge: "OS Environment", icon: SiLinux, color: "#FCC624" },
-  { name: "Cloudinary", category: "devops", badge: "Media CDN", icon: SiCloudinary, color: "#3448C5" },
+const curatedSkillGroups: SkillGroup[] = [
+  {
+    number: "01",
+    title: "Frontend & Web Engineering",
+    summary: "App Router SSR/CSR, Modern Component Systems & Mobile-First PWAs",
+    items: [
+      {
+        name: "Next.js 15/16",
+        detail: "App Router, RSC & Server Actions",
+        icons: [SiNextdotjs],
+      },
+      {
+        name: "React 19 & TypeScript",
+        detail: "Strict Type-Safe UI Architecture",
+        icons: [SiReact, SiTypescript],
+      },
+      {
+        name: "Tailwind CSS v4 & MUI v6",
+        detail: "Design Tokens & Component Systems",
+        icons: [SiTailwindcss, SiMui],
+      },
+      {
+        name: "Recharts & Framer Motion",
+        detail: "Analytical Charts & Micro-Interactions",
+        icons: [SiFramer],
+      },
+      {
+        name: "PWA Manifest & Flutter",
+        detail: "Installable Mobile-First & Cross-Platform",
+        icons: [SiFlutter],
+      },
+    ],
+  },
+  {
+    number: "02",
+    title: "Backend, APIs & Distributed Data",
+    summary: "High-Concurrency Services, Relational Modeling & TB-Scale Databases",
+    items: [
+      {
+        name: "NestJS 11 & Node.js",
+        detail: "Modular Enterprise RESTful APIs",
+        icons: [SiNestjs, SiNodedotjs],
+      },
+      {
+        name: "Express.js & FastAPI",
+        detail: "Lightweight Microservices & Python APIs",
+        icons: [SiExpress, SiFastapi],
+      },
+      {
+        name: "PostgreSQL (Citus)",
+        detail: "Distributed Sharding & PL/pgSQL Tuning",
+        icons: [SiPostgresql],
+      },
+      {
+        name: "ClickHouse & PyArrow",
+        detail: "Columnar OLAP & Parquet Pipelines",
+        icons: [SiClickhouse, SiPython],
+      },
+      {
+        name: "Prisma ORM & Supabase",
+        detail: "Schema Governance, Auth & Telemetry",
+        icons: [SiPrisma, SiSupabase],
+      },
+    ],
+  },
+  {
+    number: "03",
+    title: "DevOps, Observability & AI",
+    summary: "Automated Workflows, Agentic Orchestration & Production Telemetry",
+    items: [
+      {
+        name: "n8n & Gemini API",
+        detail: "Autonomous BI Agents & AI Orchestration",
+        icons: [SiN8N, SiGooglegemini],
+      },
+      {
+        name: "Apache Airflow",
+        detail: "Automated DAG & ETL Scheduling",
+        icons: [SiApacheairflow],
+      },
+      {
+        name: "Datadog (APM & RUM)",
+        detail: "Latency Logging & System Observability",
+        icons: [SiDatadog],
+      },
+      {
+        name: "GitHub Actions & Docker",
+        detail: "CI/CD Pipelines & Containerization",
+        icons: [SiGithubactions, SiDocker],
+      },
+      {
+        name: "Linux (Ubuntu/Debian)",
+        detail: "Server CLI & Production Deployment",
+        icons: [SiLinux],
+      },
+    ],
+  },
+  {
+    number: "04",
+    title: "Software Engineering & Process",
+    summary: "Upstream Requirements Specification & Scalable Workspace Design",
+    items: [
+      {
+        name: "Turborepo Monorepo",
+        detail: "Multi-App Workspace Isolation",
+        icons: [SiTurborepo],
+      },
+      {
+        name: "System Requirements & RBAC",
+        detail: "Upstream Architecture & Role Modeling",
+        icons: [FaClipboardCheck],
+      },
+      {
+        name: "Software Analysis & Design",
+        detail: "Domain Workflows & Business Rules",
+        icons: [FaProjectDiagram],
+      },
+      {
+        name: "SSR / CSR Hybrid Design",
+        detail: "Performance & Core Web Vitals Tuning",
+        icons: [FaBolt],
+      },
+    ],
+  },
 ];
 
-const categories = [
-  { id: "all", label: "All Technologies" },
-  { id: "frontend", label: "Languages & Frontend" },
-  { id: "backend", label: "Backend & Databases" },
-  { id: "devops", label: "DevOps & Tools" },
-] as const;
-
 const Skills: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
-  const filteredSkills = useMemo(() => {
-    return allSkills.filter((skill) => {
-      const matchesCategory = activeCategory === "all" || skill.category === activeCategory;
-      const matchesSearch = skill.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            skill.badge.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, searchQuery]);
-
   return (
-    <section id="skills" className="py-24 relative overflow-hidden z-10">
-      {/* Background Subtle Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-black pointer-events-none -z-10" />
-
-      <div className="container mx-auto px-6 relative z-10 max-w-6xl">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">
-            Technical <span className="text-glow-gradient">Stack & Skills</span>
-          </h2>
-          <p className="text-gray-400 max-w-xl mx-auto text-lg">
-            A comprehensive, battle-tested suite of technologies I leverage across Frontend, Backend, Data Engineering, and DevOps.
-          </p>
-        </div>
-
-        {/* Filter Controls (Tabs + Search Bar) */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-white/5 p-3 rounded-2xl border border-white/10 backdrop-blur-md">
-          
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 ${
-                  activeCategory === cat.id
-                    ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+    <section id="skills" className="py-16 sm:py-24 px-5 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Asymmetric Editorial Statement */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 items-start mb-12 sm:mb-20">
+          <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
+            <span>TECHNICAL STACK</span>
+            <span className="inline-block w-8 h-px bg-ink-muted" />
+            <span className="text-ink-primary">→</span>
           </div>
 
-          {/* Search Input */}
-          <div className="relative w-full md:w-64">
-            <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-            <input
-              type="text"
-              placeholder="Search skill (e.g. Docker)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
-            />
+          <div className="md:col-span-8">
+            <h2 className="text-lg sm:text-2xl lg:text-[1.75rem] leading-[1.45] sm:leading-[1.38] font-normal text-ink-primary tracking-tight">
+              A focused,{" "}
+              <span className="text-ink-muted">production-proven stack</span>{" "}
+              aligned with my engineering resume — spanning{" "}
+              <span className="text-ink-muted">
+                upstream system architecture
+              </span>
+              ,{" "}
+              <span className="text-ink-muted">
+                Next.js/Turborepo frontends
+              </span>
+              , and{" "}
+              <span className="text-ink-muted">
+                TB-scale distributed databases
+              </span>
+              .
+            </h2>
           </div>
-
         </div>
 
-        {/* Counter Badge */}
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-6 px-1">
-          <span>Showing <strong className="text-gray-300">{filteredSkills.length}</strong> of {allSkills.length} Technologies</span>
-          {searchQuery && (
-            <button 
-              onClick={() => setSearchQuery("")} 
-              className="text-blue-400 hover:underline text-xs"
+        {/* 4-Pillar Editorial Specification Grid with Official Technology Icons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {curatedSkillGroups.map((group) => (
+            <div
+              key={group.number}
+              className="rounded-[24px] sm:rounded-[28px] bg-surface border border-line p-5 sm:p-8 lg:p-10 flex flex-col justify-between"
             >
-              Clear Search
-            </button>
-          )}
-        </div>
+              <div>
+                <div className="flex items-center justify-between gap-4 border-b border-line pb-4 mb-4 sm:mb-5">
+                  <div>
+                    <span className="text-xs font-mono text-ink-muted block mb-1">
+                      {group.number}
+                    </span>
+                    <h3 className="text-lg sm:text-2xl font-semibold text-ink-primary tracking-tight">
+                      {group.title}
+                    </h3>
+                  </div>
+                </div>
 
-        {/* Responsive Skill Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
-          {filteredSkills.map((skill, index) => (
-            <div 
-              key={index} 
-              className="glass-card shimmer-container p-5 rounded-2xl flex flex-col items-center justify-between gap-3 group cursor-default transition-all duration-400 hover:-translate-y-2 border border-white/5 hover:border-white/20 relative overflow-hidden shadow-lg"
-            >
-              {/* Glow Accent on Hover */}
-              <div 
-                className="absolute inset-0 blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none"
-                style={{ backgroundColor: skill.color }}
-              />
+                <p className="text-xs sm:text-sm text-ink-secondary mb-5 leading-relaxed">
+                  {group.summary}
+                </p>
 
-              {/* Icon Container */}
-              <div className="p-3.5 rounded-2xl bg-white/5 group-hover:bg-white/10 transition-all duration-300 relative group-hover:scale-110">
-                <skill.icon size={36} color={skill.color} className="relative z-10 drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]" />
-              </div>
+                <ul className="divide-y divide-line/70">
+                  {group.items.map((item) => (
+                    <li
+                      key={item.name}
+                      className="py-3.5 flex items-center justify-between gap-3"
+                    >
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        {/* Icon Container */}
+                        <div className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-surface-muted border border-line text-ink-primary shrink-0">
+                          {item.icons.map((Icon, iIdx) => (
+                            <Icon key={iIdx} className="w-4 h-4" />
+                          ))}
+                        </div>
 
-              {/* Name & Badge */}
-              <div className="text-center w-full">
-                <h3 className="text-gray-100 font-semibold text-sm tracking-wide group-hover:text-white transition-colors truncate">
-                  {skill.name}
-                </h3>
-                <span className="inline-block text-[10px] font-mono text-gray-500 mt-1 uppercase tracking-wider">
-                  {skill.badge}
-                </span>
+                        <div className="min-w-0">
+                          <span className="text-sm font-semibold text-ink-primary block truncate">
+                            {item.name}
+                          </span>
+                          <span className="text-[11px] sm:hidden font-mono text-ink-secondary block truncate mt-0.5">
+                            {item.detail}
+                          </span>
+                        </div>
+                      </div>
+
+                      <span className="hidden sm:inline-block text-xs font-mono text-ink-secondary text-right shrink-0">
+                        {item.detail}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
         </div>
-
-        {filteredSkills.length === 0 && (
-          <div className="text-center py-16 bg-white/5 rounded-2xl border border-white/5">
-            <p className="text-gray-400 text-sm">No skills found matching &quot;{searchQuery}&quot;.</p>
-          </div>
-        )}
-
       </div>
     </section>
   );
