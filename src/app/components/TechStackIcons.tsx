@@ -28,6 +28,8 @@ import {
   SiApache,
   SiHtml5,
   SiPwa,
+  SiStellar,
+  SiRust,
 } from "react-icons/si";
 import {
   FaChartBar,
@@ -69,6 +71,8 @@ function getTechIcon(techName: string): IconType {
   if (lower.includes("gemini")) return SiGooglegemini;
   if (lower.includes("n8n")) return SiN8N;
   if (lower.includes("superset") || lower.includes("apache")) return SiApache;
+  if (lower.includes("stellar")) return SiStellar;
+  if (lower.includes("soroban") || lower.includes("rust")) return SiRust;
   if (lower.includes("canvas") || lower.includes("html5")) return SiHtml5;
   if (lower.includes("pwa")) return SiPwa;
 

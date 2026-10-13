@@ -99,7 +99,6 @@ const Experience: React.FC = () => {
             <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
               <span>CAREER &amp; EDUCATION</span>
               <span className="inline-block w-8 h-px bg-ink-muted" />
-              <span className="text-ink-primary">→</span>
             </div>
 
             <div className="md:col-span-8">
@@ -199,7 +198,6 @@ const Experience: React.FC = () => {
             <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
               <span>HONORS &amp; AWARDS</span>
               <span className="inline-block w-8 h-px bg-ink-muted" />
-              <span className="text-ink-primary">→</span>
             </div>
 
             <div className="md:col-span-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">

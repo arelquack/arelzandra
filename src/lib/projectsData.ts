@@ -22,6 +22,40 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
+    id: "musubix",
+    title: "Musubix",
+    subtitle:
+      "Borderless Micro-Freelance Marketplace & Smart Escrow | Stellar APAC Hackathon",
+    role: "Founder & Full-Stack Architect",
+    date: "Jul 2026",
+    image: "/images/projects/musubix.png",
+    description:
+      "A next-generation Web3 micro-freelance marketplace built on the Stellar Network and Soroban Smart Contracts, delivering custodial wallet abstraction, automated Rust smart escrows, instant cross-border path payments to local IDR, and Google Gemini AI job integrity auditing.",
+    highlights: [
+      "Built complete Web2-first custodial wallet abstraction: users log in via email while server-side AES-256 encrypted Stellar keypairs eliminate gas fees and seed phrase friction.",
+      "Engineered a zero-trust Smart Escrow contract in Rust using Soroban SDK (#![no_std]), securing client deposits until milestone authorization without third-party intermediaries.",
+      "Integrated Stellar Path Payment and DEX liquidity pools to settle cross-border transactions (USD/USDC/XLM) to liquid IDR in < 5 seconds with negligible transaction fees (< $0.0001).",
+      "Integrated Google Gemini AI for automated job description and budget audits, protecting freelancers from unfair compensation and ambiguous requirements.",
+    ],
+    stack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "NestJS",
+      "Prisma",
+      "Stellar SDK",
+      "Soroban (Rust)",
+      "Google Gemini AI",
+      "Tailwind CSS",
+    ],
+    links: {
+      demo: "https://musubix.vercel.app/",
+      repo: null,
+    },
+    hasCaseStudy: true,
+    featured: true,
+  },
+  {
     id: "superflow",
     title: "Superflow Enterprise",
     subtitle:
@@ -100,7 +134,7 @@ export const projectsData: Project[] = [
     title: "NewlyMom",
     subtitle:
       "Maternal Mental Health Ecosystem (Web Admin CMS & Mobile App) | Client Project",
-    role: "Frontend Web Lead & Mobile Integrator",
+    role: "Frontend Developer",
     date: "Feb 2026 – Jun 2026",
     image: "/images/newlymom.png",
     description:
@@ -196,7 +230,7 @@ export const projectsData: Project[] = [
     id: "votex",
     title: "VoteX",
     subtitle: "Decentralized Autonomous Organization (DAO) Voting Network",
-    role: "Web3 & Frontend Developer",
+    role: "Backend & Smart Contract Developer",
     date: "May 2026",
     image: "/images/votex.png",
     description:
@@ -219,7 +253,7 @@ export const projectsData: Project[] = [
     id: "adkeskom",
     title: "AdkesKom",
     subtitle: "Gamified Student Advocacy & Member Engagement Platform",
-    role: "Full-Stack Developer",
+    role: "Frontend Developer",
     date: "Jan 2026",
     image: "/images/adkeskom.png",
     description:
@@ -240,13 +274,26 @@ export const projectsData: Project[] = [
   {
     id: "rekamedchain",
     title: "RekamedChain",
-    subtitle: "Self-Sovereign Identity (SSI) & IPFS Medical Record System",
-    role: "Backend & Infrastructure Engineer",
-    date: "Oct 2025",
-    image: "/images/rekamedchain.png",
+    subtitle:
+      "Decentralized Digital Health Record Platform (KMIPN VII 1st Winner)",
+    role: "Full-Stack Engineer",
+    date: "2025",
+    image: "/images/projects/rekamedchain.png",
     description:
-      "MVP of an e-government digital medical record system securing patient data sovereignty through Self-Sovereign Identity (SSI) and IPFS.",
-    stack: ["Golang", "Docker", "IPFS", "CI/CD"],
+      "A decentralized e-government electronic health records platform built with Permissioned Blockchain (Hyperledger Fabric), Self-Sovereign Identity (SSI), and encrypted off-chain storage to guarantee patient data sovereignty.",
+    highlights: [
+      "Won 1st Place (Juara 1) UI/UX E-Government Category at KMIPN VII 2025.",
+      "Architected a 3-tier decentralized topology: Permissioned Blockchain consensus, SSI patient sovereignty, and CP-ABE encrypted off-chain IPFS storage.",
+      "Developed a dual-interface ecosystem: a patient mobile app with time-bound consent management and a clinical web portal with unified cross-facility health timelines.",
+    ],
+    stack: [
+      "Hyperledger Fabric",
+      "Golang",
+      "Next.js",
+      "Flutter",
+      "IPFS",
+      "Docker",
+    ],
     partners: [
       {
         name: "Reqi Jumantara Hapid",
@@ -261,6 +308,7 @@ export const projectsData: Project[] = [
       demo: null,
       repo: null,
     },
+    hasCaseStudy: true,
     featured: false,
   },
 ];

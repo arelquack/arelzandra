@@ -37,7 +37,6 @@ const Contact: React.FC = () => {
           <div className="md:col-span-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-ink-secondary pt-1 md:pt-2">
             <span>GET IN TOUCH</span>
             <span className="inline-block w-8 h-px bg-ink-muted" />
-            <span className="text-ink-primary">→</span>
           </div>
 
           <div className="md:col-span-8">

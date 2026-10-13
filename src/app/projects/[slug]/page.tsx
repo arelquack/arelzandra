@@ -51,15 +51,24 @@ interface Props {
 
 export async function generateStaticParams() {
   return [
+    { slug: "musubix" },
     { slug: "superflow" },
     { slug: "simona-polban" },
     { slug: "nexus" },
     { slug: "website-nk" },
+    { slug: "rekamedchain" },
   ];
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
+  if (slug === "musubix") {
+    return {
+      title: "Musubix — Case Study",
+      description:
+        "Architectural case study of Musubix, a Borderless Micro-Freelance Marketplace powered by Stellar Network, Soroban Smart Escrow (Rust), and Google Gemini AI.",
+    };
+  }
   if (slug === "superflow") {
     return {
       title: "Superflow Enterprise — Case Study",
@@ -88,6 +97,13 @@ export async function generateMetadata({ params }: Props) {
         "Deep dive architectural case study of NK Project, a modern full-stack web application & CMS dashboard built for Nihongo Kurabu SMAN 3 Bukittinggi.",
     };
   }
+  if (slug === "rekamedchain") {
+    return {
+      title: "RekamedChain — Case Study",
+      description:
+        "Architectural case study of RekamedChain, a Decentralized Electronic Medical Record (RME) Platform with Permissioned Blockchain, Self-Sovereign Identity (SSI), and Off-Chain Encrypted Storage.",
+    };
+  }
   return { title: "Project Case Study" };
 }
 
@@ -95,16 +111,515 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
   const { slug } = await params;
 
   if (
+    slug !== "musubix" &&
     slug !== "superflow" &&
     slug !== "simona-polban" &&
     slug !== "nexus" &&
-    slug !== "website-nk"
+    slug !== "website-nk" &&
+    slug !== "rekamedchain"
   ) {
     return notFound();
   }
 
   // =========================================================================
-  // 0. SUPERFLOW ENTERPRISE — AUTONOMOUS CONVERSATIONAL BI AGENT
+  // 0. MUSUBIX — BORDERLESS MICRO-FREELANCE MARKETPLACE
+  // =========================================================================
+  if (slug === "musubix") {
+    const corePillars = [
+      {
+        number: "01",
+        name: "Full Custodial Wallet Abstraction",
+        badge: "Web2 Experience",
+        icon: FaUsers,
+        description:
+          "Eliminates the Web3 steep learning curve. Users sign up via standard email without ever having to install browser extensions (Freighter, MetaMask), memorize 12-word seed phrases, or manage volatile gas fees.",
+        highlights: [
+          "Automated server-side Stellar keypair generation encrypted with AES-256",
+          "Seamless Web2 login flow masking raw cryptographic transaction hashes and gas fee complexity",
+          "Drives frictionless onboarding for mainstream freelancers and local SMEs unfamiliar with Web3",
+        ],
+      },
+      {
+        number: "02",
+        name: "Zero-Trust Smart Escrow Engine",
+        badge: "Soroban Smart Contracts",
+        icon: FaLock,
+        description:
+          "Autonomous escrow contracts written in Rust using Soroban SDK (#![no_std]). Locks client payments on the Stellar ledger upon job agreement and programmatically releases tokens only upon client delivery approval.",
+        highlights: [
+          "State machine operations: initialize (bind parties), deposit (lock funds), approve_and_pay (release tokens)",
+          "Protects freelancers against non-payment and protects employers against contractor ghosting",
+          "Cuts intermediary platform commissions from traditional 10–20% down to flat ~5% with fractions of a cent network fees",
+        ],
+      },
+      {
+        number: "03",
+        name: "Stellar Path Payment & DEX Liquidity",
+        badge: "Cross-Border Settlement",
+        icon: FaCoins,
+        description:
+          "Leverages native Stellar Path Payment and on-chain Decentralized Exchange (DEX) liquidity pools. International clients fund gigs in USD/USDC/XLM, and funds settle into liquid IDR ready for instant local bank disbursement.",
+        highlights: [
+          "Sub-5-second finality compared to 3–7 business days required by SWIFT wire transfers or PayPal",
+          "Near-zero network transaction fees (< $0.0001) preserving margins on $20–$100 micro-tasks",
+          "Direct settlement to local payment channels (BCA, Mandiri, BNI, GoPay, QRIS) without exorbitant FX markups",
+        ],
+      },
+      {
+        number: "04",
+        name: "AI Job Integrity & Budget Auditing",
+        badge: "Google Gemini AI",
+        icon: FaChartLine,
+        description:
+          "Deep integration with Google Gemini multi-model API to audit job postings in real time before publication, scoring specifications from 1–100 and providing proactive fairness feedback.",
+        highlights: [
+          "Protects freelancers by flagging severely underpriced budgets and ambiguous requirements",
+          "Provides constructive optimization prompts to employers for higher application conversion",
+          "Automates marketplace moderation to maintain high quality standards across micro-task listings",
+        ],
+      },
+    ];
+
+    const userJourneys = [
+      {
+        title: "Client Workflow (Employer)",
+        role: "Job Poster & Funder",
+        icon: FaBuilding,
+        steps: [
+          "Frictionless email login with automatic backend Stellar account initialization",
+          "Post job requirements evaluated instantly by Gemini AI for budget & scope integrity",
+          "Hire applicant & fund contract via QRIS/fiat simulation, locking funds into Soroban Escrow",
+          "Review delivered work artifacts, submit star rating, and trigger automated token release",
+        ],
+      },
+      {
+        title: "Freelancer Workflow (Talent)",
+        role: "Micro-Task Contributor",
+        icon: FaTasks,
+        steps: [
+          "Explore open gigs with AI quality scores and real-time IDR currency conversion estimates",
+          "Accept job with cryptographic certainty that employer deposit is already locked in escrow",
+          "Execute task and submit repository commits, design assets, or documentation deliverables",
+          "Receive instant payment disbursement into local bank accounts via Stellar DEX Path Payment",
+        ],
+      },
+    ];
+
+    const competitiveComparison = [
+      {
+        metric: "Platform Commission",
+        traditional: "10% – 20% + withdrawal & wire fees",
+        musubix: "Flat ~5% (Stellar fee < $0.0001)",
+      },
+      {
+        metric: "Disbursement Latency",
+        traditional: "3 – 7 business days (SWIFT / PayPal)",
+        musubix: "< 5 seconds instant on-chain finality",
+      },
+      {
+        metric: "Fund Custody Security",
+        traditional: "Held by centralized platform balance sheet",
+        musubix: "Non-custodial Soroban Smart Escrow contract",
+      },
+      {
+        metric: "FX & Cross-Border Friction",
+        traditional: "High conversion markups & intermediary fees",
+        musubix: "Automated Stellar Path Payment (USD → IDR)",
+      },
+      {
+        metric: "Web3 Barrier to Entry",
+        traditional: "Not Web3 (or requires seed phrase & wallet extension)",
+        musubix: "Email login + server-side wallet abstraction",
+      },
+      {
+        metric: "Job Specification Quality",
+        traditional: "Manual report queue & frequent ghosting",
+        musubix: "Pre-screened by Gemini AI (fairness & scope score)",
+      },
+    ];
+
+    return (
+      <div className="min-h-screen bg-canvas text-ink-primary flex flex-col">
+        <Navbar />
+
+        <main className="flex-grow pt-32 pb-24 px-5 sm:px-6">
+          <div className="max-w-4xl mx-auto">
+            <Link
+              href="/projects"
+              className="md:hidden inline-flex items-center text-xs font-semibold uppercase tracking-[0.16em] text-ink-secondary hover:text-ink-primary mb-8 transition-colors group"
+            >
+              <FaArrowLeft
+                size={10}
+                className="mr-2 group-hover:-translate-x-1 transition-transform"
+              />
+              Back to Projects
+            </Link>
+
+            <header className="mb-12 border-b border-line pb-10 space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono uppercase tracking-[0.16em] text-ink-muted">
+                <span>
+                  CASE STUDY &amp; ARCHITECTURE · JUL 2026 · WEB3 &amp; STELLAR
+                </span>
+                <div className="flex items-center gap-4">
+                  <span className="inline-flex items-center gap-1.5 text-ink-primary font-semibold">
+                    <FaTrophy size={11} /> APAC Stellar Hackathon MVP
+                  </span>
+                  <a
+                    href="https://musubix.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-ink-primary font-semibold hover:underline"
+                  >
+                    Live Platform <FaExternalLinkAlt size={10} />
+                  </a>
+                </div>
+              </div>
+
+              <h1 className="font-serif uppercase text-4xl sm:text-6xl md:text-7xl text-ink-primary leading-[0.95] tracking-tight">
+                Musubix
+              </h1>
+
+              <p className="text-lg sm:text-xl text-ink-secondary leading-relaxed">
+                Borderless Micro-Freelance Marketplace powered by the{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Stellar Network
+                </strong>{" "}
+                and{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Soroban Smart Contracts
+                </strong>{" "}
+                — uniting custodial wallet abstraction, automated Rust smart escrows,
+                sub-5-second cross-border payments into local IDR, and Google Gemini
+                AI job integrity auditing to dismantle fee gouging in the gig economy.
+              </p>
+
+              <div className="pt-2">
+                <TechStackIcons
+                  stack={[
+                    "Next.js 16",
+                    "React 19",
+                    "TypeScript",
+                    "NestJS",
+                    "Prisma",
+                    "Stellar SDK",
+                    "Soroban (Rust)",
+                    "Google Gemini AI",
+                    "Tailwind CSS",
+                  ]}
+                />
+              </div>
+            </header>
+
+            {/* Hero Banner Image */}
+            <div className="rounded-[24px] sm:rounded-[28px] bg-surface-muted p-3.5 sm:p-6 border border-line mb-16">
+              <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-line bg-surface shadow-[0_12px_32px_rgba(20,20,22,0.05)]">
+                <Image
+                  src="/images/projects/musubix.png"
+                  alt="Musubix — Borderless Micro-Freelance Platform Powered by Stellar"
+                  width={1920}
+                  height={920}
+                  className="w-full h-auto block"
+                  priority
+                />
+              </div>
+            </div>
+
+            <article className="space-y-16 text-ink-secondary leading-relaxed">
+              {/* Value Proposition Callout */}
+              <div className="p-6 sm:p-8 rounded-[24px] bg-surface-muted border border-line flex items-start gap-4">
+                <FaShieldAlt className="w-5 h-5 text-ink-primary shrink-0 mt-1" />
+                <div className="space-y-1.5">
+                  <strong className="text-ink-primary font-semibold text-base block">
+                    Web2 Simplicity with Web3 Sovereign Guarantees
+                  </strong>
+                  <p className="text-sm text-ink-secondary leading-relaxed">
+                    Musubix bridges the gap between Web2 usability and Web3 financial
+                    sovereignty: users sign up via standard email without wallet
+                    extensions or gas tokens, while funds are programmatically secured
+                    inside non-custodial Soroban smart contracts and settled instantly to
+                    local currency via Stellar DEX liquidity.
+                  </p>
+                </div>
+              </div>
+
+              {/* 01 — Problem Statement & The Why */}
+              <section className="space-y-4">
+                <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted">
+                  01 — Problem Statement: The Gig Economy Trilemma
+                </h2>
+                <div className="text-base sm:text-lg text-ink-primary bg-surface p-6 sm:p-8 rounded-[24px] border border-line leading-relaxed space-y-4">
+                  <p>
+                    The global digital gig economy provides boundless remote opportunities
+                    for young professionals across Southeast Asia. Yet, conventional
+                    freelancing platforms suffer from severe structural bottlenecks:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-ink-secondary pt-2">
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        Exorbitant Platform Commissions (10%–20%)
+                      </strong>
+                      <span>
+                        Traditional giants take predatory commissions on small gigs,
+                        disproportionately penalizing developing-nation talent on $20–$100
+                        micro-projects.
+                      </span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        Slow Cross-Border Payouts (3–7 Days)
+                      </strong>
+                      <span>
+                        SWIFT wire transfers and PayPal enforce predatory FX exchange rates
+                        and delay crucial living expenses for days.
+                      </span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        The Trust Gap &amp; Ghosting Risks
+                      </strong>
+                      <span>
+                        Employers fear unfulfilled upfront deposits, while freelancers fear
+                        unpaid labor after deliverable handover.
+                      </span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        The Web3 UX Barrier
+                      </strong>
+                      <span>
+                        Existing crypto dApps mandate confusing browser extensions, seed
+                        phrases, and gas fee management that alienates 95% of users.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 02 — 4 Core System Pillars */}
+              <section className="space-y-6">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    02 — Core System Architecture &amp; Innovation Pillars
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    Engineered from ideation to production as an end-to-end full-stack
+                    solution uniting microservices, AI, and smart contracts:
+                  </p>
+                </div>
+
+                <div className="space-y-6">
+                  {corePillars.map((pillar) => {
+                    const PillarIcon = pillar.icon;
+                    return (
+                      <div
+                        key={pillar.number}
+                        className="p-6 sm:p-8 rounded-[24px] bg-surface border border-line space-y-4"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
+                          <div className="flex items-center gap-3.5">
+                            <span className="text-xs font-mono text-ink-muted">
+                              {pillar.number}
+                            </span>
+                            <div className="p-2.5 rounded-xl bg-surface-muted text-ink-primary">
+                              <PillarIcon size={16} />
+                            </div>
+                            <h3 className="text-lg sm:text-xl font-semibold text-ink-primary">
+                              {pillar.name}
+                            </h3>
+                          </div>
+                          <span className="text-xs font-mono text-ink-muted uppercase tracking-wider">
+                            {pillar.badge}
+                          </span>
+                        </div>
+
+                        <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
+                          {pillar.description}
+                        </p>
+
+                        <ul className="space-y-2 text-xs sm:text-sm text-ink-secondary">
+                          {pillar.highlights.map((h, i) => (
+                            <li key={i} className="flex items-start gap-2.5">
+                              <FaCheckCircle className="text-ink-primary w-3.5 h-3.5 shrink-0 mt-1" />
+                              <span>{h}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* 03 — Technical Monorepo Architecture */}
+              <section className="space-y-6 pt-6 border-t border-line">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    03 — Technical Microservice Architecture
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    Organized across high-performance modular layers connecting Web2
+                    presentation with on-chain Soroban state:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-6 rounded-2xl bg-surface border border-line space-y-2">
+                    <div className="flex items-center gap-2 text-ink-muted font-mono text-xs uppercase tracking-wider">
+                      <FaCode className="text-ink-primary" /> Frontend Presentation
+                    </div>
+                    <h3 className="text-ink-primary font-semibold text-base sm:text-lg">
+                      Next.js 16 App Router
+                    </h3>
+                    <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed">
+                      Role-tailored dashboards for clients and freelancers with QRIS
+                      simulations, real-time job queues, and responsive Tailwind UI.
+                    </p>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-surface border border-line space-y-2">
+                    <div className="flex items-center gap-2 text-ink-muted font-mono text-xs uppercase tracking-wider">
+                      <FaServer className="text-ink-primary" /> Backend Microservices
+                    </div>
+                    <h3 className="text-ink-primary font-semibold text-base sm:text-lg">
+                      NestJS TCP Microservices
+                    </h3>
+                    <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed">
+                      API Gateway routing to user-job-service (Prisma ORM), stellar-service
+                      (AES key management &amp; RPC), and ai-analyzer (Gemini).
+                    </p>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-surface border border-line space-y-2">
+                    <div className="flex items-center gap-2 text-ink-muted font-mono text-xs uppercase tracking-wider">
+                      <FaLock className="text-ink-primary" /> Smart Contracts
+                    </div>
+                    <h3 className="text-ink-primary font-semibold text-base sm:text-lg">
+                      Soroban Escrow (Rust)
+                    </h3>
+                    <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed">
+                      Deterministic escrow logic written in no_std Rust enforcing
+                      deposit initialization and atomic milestone-verified disbursements.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              {/* 04 — Dual User Journey Workflows */}
+              <section className="space-y-6 pt-6 border-t border-line">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    04 — Dual Persona Workflows (Client &amp; Freelancer)
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    End-to-end task lifecycle reconciling transparent job auditing with
+                    milestone escrow protection:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {userJourneys.map((j) => {
+                    const JourneyIcon = j.icon;
+                    return (
+                      <div
+                        key={j.title}
+                        className="p-6 sm:p-7 rounded-[24px] bg-surface border border-line space-y-4"
+                      >
+                        <div className="flex items-center gap-3 border-b border-line pb-3.5">
+                          <div className="p-2.5 rounded-xl bg-surface-muted text-ink-primary">
+                            <JourneyIcon size={16} />
+                          </div>
+                          <div>
+                            <h3 className="text-base sm:text-lg font-semibold text-ink-primary">
+                              {j.title}
+                            </h3>
+                            <span className="text-xs font-mono text-ink-muted">
+                              {j.role}
+                            </span>
+                          </div>
+                        </div>
+
+                        <ul className="space-y-2.5 text-xs sm:text-sm text-ink-secondary">
+                          {j.steps.map((step, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5">
+                              <span className="font-mono text-xs text-ink-muted font-bold shrink-0 mt-0.5">
+                                0{idx + 1}.
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* 05 — Competitive Benchmarks */}
+              <section className="space-y-6 pt-6 border-t border-line">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    05 — Operational Benchmark: Legacy Platforms vs Musubix
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    Direct architectural comparison against legacy Web2 gig platforms:
+                  </p>
+                </div>
+
+                <div className="rounded-[24px] bg-surface border border-line overflow-hidden">
+                  <div className="divide-y divide-line">
+                    {competitiveComparison.map((row, idx) => (
+                      <div
+                        key={idx}
+                        className="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-start text-xs sm:text-sm"
+                      >
+                        <div className="md:col-span-4 font-semibold text-ink-primary">
+                          {row.metric}
+                        </div>
+                        <div className="md:col-span-4 text-ink-muted">
+                          <span className="font-mono text-[10px] uppercase tracking-wider block mb-0.5">
+                            Traditional (Upwork / Fiverr):
+                          </span>
+                          {row.traditional}
+                        </div>
+                        <div className="md:col-span-4 text-ink-primary font-medium">
+                          <span className="font-mono text-[10px] uppercase tracking-wider text-ink-muted block mb-0.5">
+                            Musubix (Stellar &amp; Soroban):
+                          </span>
+                          {row.musubix}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </article>
+
+            {/* Footer Navigation */}
+            <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-secondary">
+              <Link
+                href="/projects"
+                className="md:hidden inline-flex items-center text-ink-primary font-semibold uppercase tracking-[0.16em] hover:opacity-70 transition-opacity group"
+              >
+                <FaArrowLeft
+                  size={10}
+                  className="mr-2 group-hover:-translate-x-1 transition-transform"
+                />
+                Back to Projects
+              </Link>
+              <span className="font-mono text-ink-muted">
+                Musubix Case Study · APAC Stellar Hackathon · Founder &amp; Architect
+              </span>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // 1. SUPERFLOW ENTERPRISE — AUTONOMOUS CONVERSATIONAL BI AGENT
   // =========================================================================
   if (slug === "superflow") {
     const reactTools = [
@@ -1389,7 +1904,8 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
   // =========================================================================
   // 3. NEXUS PERSONAL OPERATING SYSTEM (LIFEOS)
   // =========================================================================
-  const modules = [
+  if (slug === "nexus") {
+    const modules = [
     {
       id: "overview",
       number: "01",
@@ -1754,4 +2270,438 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
       <Footer />
     </div>
   );
+  }
+
+  // =========================================================================
+  // 4. REKAMEDCHAIN — DECENTRALIZED DIGITAL HEALTH RECORD PLATFORM
+  // =========================================================================
+  if (slug === "rekamedchain") {
+    const architecturalLayers = [
+      {
+        number: "01",
+        name: "Consensus & Integrity Layer",
+        badge: "Permissioned Blockchain",
+        icon: FaServer,
+        tech: "Hyperledger Fabric & Go (Chaincode)",
+        description:
+          "Enforces verifiable network participation exclusively for accredited hospitals, licensed clinicians, patients, and healthcare authorities. Operates an immutable distributed ledger recording cryptographic document hash anchors and tamper-proof access audit trails without central points of failure.",
+        highlights: [
+          "Eliminates single-point-of-failure vulnerabilities that plague centralized health servers",
+          "Stores SHA-256 cryptographic hashes and metadata on-chain rather than heavy raw records to maintain high throughput",
+          "Maintains an immutable, chronologically ordered audit log of all permission requests, approvals, and revocations",
+        ],
+      },
+      {
+        number: "02",
+        name: "Patient Sovereignty Layer",
+        badge: "Self-Sovereign Identity (SSI)",
+        icon: FaLock,
+        tech: "Asymmetric Cryptography & Dynamic UCON",
+        description:
+          "Reverses provider-centric data ownership by providing patients with self-sovereign digital health identities. Asymmetric key pairs are generated and secured directly on the patient's device, enabling dynamic, time-bound Usage Control (UCON) over clinical records.",
+        highlights: [
+          "Patient holds unique cryptographic private keys on-device as an unforgeable digital signature",
+          "Granular consent management: patients can grant 24-hour temporary access, indefinite access, or instant revocation",
+          "Restores legal data ownership to patients in alignment with Indonesian medical practice laws (UU Praktik Kedokteran)",
+        ],
+      },
+      {
+        number: "03",
+        name: "Scalability & Distributed Storage Layer",
+        badge: "Encrypted Off-Chain Storage",
+        icon: FaDatabase,
+        tech: "IPFS & CP-ABE / ECC Encryption",
+        description:
+          "Solves blockchain storage bloat and latency bottlenecks through a hybrid architecture. High-volume electronic medical data (radiology imagery, lab diagnostics, clinical records) are strongly encrypted off-chain, while on-chain smart contracts store verifiable hash commitments.",
+        highlights: [
+          "Off-chain storage via distributed InterPlanetary File System (IPFS) and secure hospital cluster nodes",
+          "Strong encryption using Ciphertext-Policy Attribute-Based Encryption (CP-ABE) and Elliptic Curve Cryptography (ECC)",
+          "Enables national-scale throughput and scalability without sacrificing zero-knowledge data privacy",
+        ],
+      },
+    ];
+
+    const platformFlows = [
+      {
+        title: "Patient Mobile Application (Flutter)",
+        role: "Citizen Sovereignty Interface",
+        icon: FaMobileAlt,
+        steps: [
+          "e-KTP Digital Identity Verification & On-Device Keypair Generation (SSI)",
+          "Live Health Telemetry Dashboard & Real-Time Access Request Notifications",
+          "Granular Consent Management (Approve 24 Hours, Approve Indefinitely, or Reject)",
+          "Cryptographic Access Audit Trail: Review who, when, and what records were inspected",
+        ],
+      },
+      {
+        title: "Clinician & Administrative Web Portal (Next.js)",
+        role: "Healthcare Provider Portal",
+        icon: FaCode,
+        steps: [
+          "Patient Lookup by Unique RekamedChain Universal ID",
+          "One-Click Access Request Dispatch to Patient Mobile Device",
+          "Unified Longitudinal EHR Visualization across Disparate Hospital Systems",
+          "Encrypted New Clinical Diagnosis Input Anchored to Hyperledger Fabric",
+        ],
+      },
+    ];
+
+    const implementationRoadmap = [
+      {
+        phase: "Phase 1 (Months 1–2)",
+        title: "Concept Validation & Strategic Regulatory Alignment",
+        desc: "In-depth user needs validation across RSUD Kiwari hospital administrators, clinicians, and patients. Legal & regulatory alignment with Permenkes No. 24/2022 (RME) and national SATUSEHAT standards.",
+      },
+      {
+        phase: "Phase 2 (Month 3)",
+        title: "Technical Architecture & Infrastructure Setup",
+        desc: "Deployment of Hyperledger Fabric permissioned network nodes, IPFS distributed storage cluster configuration, and cryptographic schema specification (ECC & CP-ABE).",
+      },
+      {
+        phase: "Phase 3 (Months 4–8)",
+        title: "Agile Dual-Platform Development & Security Hardening",
+        desc: "Iterative development of the patient Flutter mobile application, Next.js clinical web portal, Go chaincode smart contracts, and comprehensive penetration & smart contract audits.",
+      },
+      {
+        phase: "Phase 4 (Months 9–12)",
+        title: "RSUD Kiwari Pilot Deployment & National Blueprint",
+        desc: "Controlled clinical rollout at RSUD Kiwari living laboratory, staff training, transaction latency & throughput monitoring, and formulation of a scalable national e-Government blueprint.",
+      },
+    ];
+
+    return (
+      <div className="min-h-screen bg-canvas text-ink-primary flex flex-col">
+        <Navbar />
+
+        <main className="flex-grow pt-32 pb-24 px-5 sm:px-6">
+          <div className="max-w-4xl mx-auto">
+            <Link
+              href="/projects"
+              className="md:hidden inline-flex items-center text-xs font-semibold uppercase tracking-[0.16em] text-ink-secondary hover:text-ink-primary mb-8 transition-colors group"
+            >
+              <FaArrowLeft
+                size={10}
+                className="mr-2 group-hover:-translate-x-1 transition-transform"
+              />
+              Back to Projects
+            </Link>
+
+            <header className="mb-12 border-b border-line pb-10 space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono uppercase tracking-[0.16em] text-ink-muted">
+                <span>
+                  CASE STUDY &amp; ARCHITECTURE · 2025 · E-GOVERNMENT INNOVATION
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-ink-primary font-semibold">
+                  <FaTrophy size={11} /> KMIPN VII Juara 1 UI/UX
+                </span>
+              </div>
+
+              <h1 className="font-serif uppercase text-4xl sm:text-6xl md:text-7xl text-ink-primary leading-[0.95] tracking-tight">
+                RekamedChain
+              </h1>
+
+              <p className="text-lg sm:text-xl text-ink-secondary leading-relaxed">
+                Decentralized Electronic Medical Record (RME) Platform engineered
+                with{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Trifur Polban
+                </strong>{" "}
+                — uniting{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Permissioned Blockchain (Hyperledger Fabric)
+                </strong>
+                ,{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Self-Sovereign Identity (SSI)
+                </strong>
+                , and{" "}
+                <strong className="text-ink-primary font-semibold">
+                  Off-Chain Encrypted IPFS Storage
+                </strong>{" "}
+                to resolve data fragmentation, eliminate single points of
+                failure, and guarantee patient data sovereignty in compliance
+                with Permenkes No. 24/2022.
+              </p>
+
+              <div className="pt-2">
+                <TechStackIcons
+                  stack={[
+                    "Hyperledger Fabric",
+                    "Golang",
+                    "Next.js",
+                    "Flutter",
+                    "IPFS",
+                    "Docker",
+                  ]}
+                />
+              </div>
+            </header>
+
+            {/* Hero Banner Image */}
+            <div className="rounded-[24px] sm:rounded-[28px] bg-surface-muted p-3.5 sm:p-6 border border-line mb-16">
+              <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-line bg-surface shadow-[0_12px_32px_rgba(20,20,22,0.05)]">
+                <Image
+                  src="/images/projects/rekamedchain.png"
+                  alt="RekamedChain — Decentralized Medical Records System"
+                  width={1920}
+                  height={920}
+                  className="w-full h-auto block"
+                  priority
+                />
+              </div>
+            </div>
+
+            <article className="space-y-16 text-ink-secondary leading-relaxed">
+              {/* Security & Regulatory Alignment Callout */}
+              <div className="p-6 sm:p-8 rounded-[24px] bg-surface-muted border border-line flex items-start gap-4">
+                <FaShieldAlt className="w-5 h-5 text-ink-primary shrink-0 mt-1" />
+                <div className="space-y-1.5">
+                  <strong className="text-ink-primary font-semibold text-base block">
+                    Patient Data Sovereignty &amp; SATUSEHAT Interoperability Alignment
+                  </strong>
+                  <p className="text-sm text-ink-secondary leading-relaxed">
+                    Under Indonesian medical regulations (Permenkes No. 24/2022
+                    and UU Praktik Kedokteran), medical record content belongs
+                    legally to the patient. RekamedChain replaces vulnerable,
+                    siloed hospital servers with cryptographic certainty: raw
+                    health records are strongly encrypted off-chain, while the
+                    blockchain enforces unalterable audit trails and dynamic
+                    consent verifications controlled solely by the patient.
+                  </p>
+                </div>
+              </div>
+
+              {/* 01 — Executive Overview & Problem Statement */}
+              <section className="space-y-4">
+                <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted">
+                  01 — Executive Overview &amp; The Systemic Healthcare Trilemma
+                </h2>
+                <div className="text-base sm:text-lg text-ink-primary bg-surface p-6 sm:p-8 rounded-[24px] border border-line leading-relaxed space-y-4">
+                  <p>
+                    Indonesia&apos;s healthcare digital transformation stands at a
+                    critical juncture. While government initiatives mandate
+                    Electronic Medical Records (RME) and national integration via
+                    SATUSEHAT, existing implementations remain plagued by three
+                    systemic failures:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm text-ink-secondary pt-2">
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        1. Data Fragmentation
+                      </strong>
+                      <span>
+                        Heterogeneous, isolated hospital databases create data silos,
+                        causing repeated diagnostic examinations and delayed clinical
+                        decision-making.
+                      </span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        2. Centralized Vulnerabilities
+                      </strong>
+                      <span>
+                        Centralized database servers represent catastrophic single
+                        points of failure and lucrative targets for cyber attacks and
+                        ransomware leaks.
+                      </span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-surface-muted border border-line space-y-1.5">
+                      <strong className="text-ink-primary font-semibold block">
+                        3. Lost Patient Sovereignty
+                      </strong>
+                      <span>
+                        Conventional provider-centric models deny patients real-time
+                        visibility and consent control over who accesses their
+                        confidential medical history.
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm sm:text-base text-ink-secondary pt-2">
+                    Engineered by{" "}
+                    <strong className="text-ink-primary font-medium">
+                      Trifur Polban
+                    </strong>{" "}
+                    (Farrel Zandra, Reqi Jumantara Hapid, and Umar Faruq Robbany) and
+                    awarded{" "}
+                    <strong className="text-ink-primary font-medium">
+                      Juara 1 UI/UX E-Government Category at KMIPN VII 2025
+                    </strong>
+                    , RekamedChain delivers a tested architectural blueprint for
+                    national e-Government health interoperability, with a living
+                    laboratory pilot deployment designed for RSUD Kiwari Bandung.
+                  </p>
+                </div>
+              </section>
+
+              {/* 02 — Tri-Layer System Architecture */}
+              <section className="space-y-6">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    02 — Tri-Layer Decentralized Architecture
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    RekamedChain solves the blockchain healthcare trilemma through
+                    a synergistic three-layer technical separation:
+                  </p>
+                </div>
+
+                <div className="space-y-6">
+                  {architecturalLayers.map((layer) => {
+                    const Icon = layer.icon;
+                    return (
+                      <div
+                        key={layer.number}
+                        className="p-6 sm:p-8 rounded-[24px] bg-surface border border-line space-y-4"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
+                          <div className="flex items-center gap-3.5">
+                            <span className="text-xs font-mono text-ink-muted">
+                              {layer.number}
+                            </span>
+                            <div className="p-2.5 rounded-xl bg-surface-muted text-ink-primary">
+                              <Icon size={16} />
+                            </div>
+                            <div>
+                              <h3 className="text-lg sm:text-xl font-semibold text-ink-primary">
+                                {layer.name}
+                              </h3>
+                              <p className="text-xs font-mono text-ink-muted">
+                                {layer.tech}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-xs font-mono text-ink-muted uppercase tracking-wider">
+                            {layer.badge}
+                          </span>
+                        </div>
+
+                        <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
+                          {layer.description}
+                        </p>
+
+                        <ul className="space-y-2 text-xs sm:text-sm text-ink-secondary">
+                          {layer.highlights.map((h, i) => (
+                            <li key={i} className="flex items-start gap-2.5">
+                              <FaCheckCircle className="text-ink-primary w-3.5 h-3.5 shrink-0 mt-1" />
+                              <span>{h}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* 03 — Dual-Interface Ecosystem */}
+              <section className="space-y-6 pt-6 border-t border-line">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    03 — Dual-Interface Application Workflows
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    Tailored public and clinical touchpoints ensuring seamless
+                    coordination across patients and hospital staff:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {platformFlows.map((flow) => {
+                    const FlowIcon = flow.icon;
+                    return (
+                      <div
+                        key={flow.title}
+                        className="p-6 sm:p-7 rounded-[24px] bg-surface border border-line space-y-4"
+                      >
+                        <div className="flex items-center gap-3 border-b border-line pb-3.5">
+                          <div className="p-2.5 rounded-xl bg-surface-muted text-ink-primary">
+                            <FlowIcon size={16} />
+                          </div>
+                          <div>
+                            <h3 className="text-base sm:text-lg font-semibold text-ink-primary">
+                              {flow.title}
+                            </h3>
+                            <span className="text-xs font-mono text-ink-muted">
+                              {flow.role}
+                            </span>
+                          </div>
+                        </div>
+
+                        <ul className="space-y-2.5 text-xs sm:text-sm text-ink-secondary">
+                          {flow.steps.map((step, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5">
+                              <span className="font-mono text-xs text-ink-muted font-bold shrink-0 mt-0.5">
+                                0{idx + 1}.
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* 04 — 4-Phase Implementation Strategy */}
+              <section className="space-y-6 pt-6 border-t border-line">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-[0.18em] text-ink-muted mb-2">
+                    04 — 12-Month Pilot Implementation Strategy (RSUD Kiwari)
+                  </h2>
+                  <p className="text-ink-secondary text-sm sm:text-base">
+                    A measured four-phase roadmap bridging technical proof-of-concept
+                    into an operational hospital living laboratory:
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {implementationRoadmap.map((item) => (
+                    <div
+                      key={item.phase}
+                      className="p-6 rounded-[24px] bg-surface border border-line space-y-2"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-ink-primary">
+                          {item.phase}
+                        </span>
+                        <span className="text-xs sm:text-sm font-semibold text-ink-primary">
+                          {item.title}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed pt-1">
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </article>
+
+            {/* Footer Navigation */}
+            <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-secondary">
+              <Link
+                href="/projects"
+                className="md:hidden inline-flex items-center text-ink-primary font-semibold uppercase tracking-[0.16em] hover:opacity-70 transition-opacity group"
+              >
+                <FaArrowLeft
+                  size={10}
+                  className="mr-2 group-hover:-translate-x-1 transition-transform"
+                />
+                Back to Projects
+              </Link>
+              <span className="font-mono text-ink-muted">
+                RekamedChain Case Study · KMIPN VII 2025 Juara 1 · Team Trifur Polban
+              </span>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  return notFound();
 }
+
