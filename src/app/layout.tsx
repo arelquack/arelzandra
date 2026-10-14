@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   applicationName: "Arel",
 
   title: {
-    default: "Arel — Farrel Zandra",
+    default: "Arel",
     template: "%s | Arel",
   },
 
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   creator: "Farrel Zandra",
 
   openGraph: {
-    title: "Arel — Farrel Zandra",
+    title: "Arel",
     description:
       "Explore the projects, architecture case studies, and engineering portfolio of Farrel Zandra.",
     url: "https://arelzandra.vercel.app",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Arel — Farrel Zandra",
+    title: "Arel",
     description:
       "Portfolio of Farrel Zandra (Arel), specializing in Next.js, Full-Stack & Data Engineering.",
     images: ["/images/og-image.jpg"],
