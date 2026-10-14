@@ -29,8 +29,10 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL("https://arelzandra.vercel.app"),
 
+  applicationName: "Arel",
+
   title: {
-    default: "Arel",
+    default: "Arel — Farrel Zandra",
     template: "%s | Arel",
   },
 
@@ -53,7 +55,7 @@ export const metadata: Metadata = {
   creator: "Farrel Zandra",
 
   openGraph: {
-    title: "Arel",
+    title: "Arel — Farrel Zandra",
     description:
       "Explore the projects, architecture case studies, and engineering portfolio of Farrel Zandra.",
     url: "https://arelzandra.vercel.app",
@@ -72,7 +74,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Arel",
+    title: "Arel — Farrel Zandra",
     description:
       "Portfolio of Farrel Zandra (Arel), specializing in Next.js, Full-Stack & Data Engineering.",
     images: ["/images/og-image.jpg"],
@@ -100,11 +102,53 @@ export const metadata: Metadata = {
       { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+
+  verification: {
+    google: "google3342f4d3d2b7c238.html",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://arelzandra.vercel.app/#website",
+        "url": "https://arelzandra.vercel.app",
+        "name": "Arel",
+        "alternateName": ["Arel Zandra", "Farrel Zandra", "arelzandra.vercel.app"],
+        "description":
+          "Personal portfolio of Farrel Zandra (Arel), a Frontend & Full-Stack Software Engineer specializing in Next.js, React, TypeScript, and Data Engineering.",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://arelzandra.vercel.app/#person",
+        "name": "Farrel Zandra",
+        "alternateName": "Arel",
+        "url": "https://arelzandra.vercel.app",
+        "sameAs": [
+          "https://github.com/arelquack",
+          "https://www.linkedin.com/in/farrel-zandra"
+        ],
+        "jobTitle": "Frontend & Full-Stack Software Engineer",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Politeknik Negeri Bandung"
+        }
+      }
+    ]
+  };
+
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${jakarta.variable} ${cormorant.variable} ${geistSans.variable} ${geistMono.variable} font-sans antialiased relative bg-canvas text-ink-primary overflow-x-hidden selection:bg-ink-primary selection:text-ink-inverse`}
       >
